@@ -1,6 +1,7 @@
 "use client";
 
 import DistortImageCanvas from "@/components/distort-image";
+import Navbar from "@/components/navbar";
 import { BentoGridItem } from "@/components/ui/bento-grid";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight, Brain, Cpu, Linkedin, Mail, MoveRight, Palette, Radio, Terminal } from "lucide-react";
@@ -256,6 +257,7 @@ export default function LandingPage() {
 
   return (
     <div ref={containerRef} className="relative min-h-[400vh] bg-black">
+      <Navbar />
 
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
 

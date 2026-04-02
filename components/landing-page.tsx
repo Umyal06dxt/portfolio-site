@@ -1,6 +1,6 @@
 "use client";
 
-import DistortImageCanvas from "@/components/distort-image";
+import AvatarScene from "@/components/avatar-scene";
 import Navbar from "@/components/navbar";
 import { BentoGridItem } from "@/components/ui/bento-grid";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
@@ -100,12 +100,8 @@ const items: Item[] = [
     title: "",
     description: "",
     header: (
-      <div className="relative w-full h-full min-h-[500px] flex items-center justify-center overflow-hidden ">
-        {/* Distort Effect Component */}
-        <div className="absolute left-0 right-0 bottom-0 top-16 w-full transition-all duration-700 pointer-events-auto">
-            <DistortImageCanvas canvasImage="/mex.png" revealImage="/mexc.png" blockSize={15} objectFit="contain" />
-        </div>
-
+      <div className="relative w-full h-full min-h-[500px] flex items-center justify-center overflow-hidden">
+        <AvatarScene mode="card" interactive={true} />
       </div>
     ),
     className: "md:col-span-1 md:row-span-2 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] border-white/5 transition-colors duration-500 hover:border-white/20",

@@ -1,6 +1,7 @@
 "use client";
 
 import AvatarScene from "@/components/avatar-scene";
+import HeroScene from "@/components/hero-scene";
 import Navbar from "@/components/navbar";
 import { BentoGridItem } from "@/components/ui/bento-grid";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
@@ -233,8 +234,6 @@ export default function LandingPage() {
 
   // 2. Main Hero Text: Visible initially, fades out quickly
   const heroTextOpacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
-  const heroTextY = useTransform(smoothProgress, [0, 0.2], [0, -100]);
-  const heroTextScale = useTransform(smoothProgress, [0, 0.2], [1, 0.8]);
 
   // 3. Side & Bottom Columns: Fade in ONLY after we zoom out significantly
   const sideColsOpacity = useTransform(smoothProgress, [0.25, 0.5], [0, 1]);
@@ -269,12 +268,10 @@ export default function LandingPage() {
 
            {/* INITIAL HERO TEXT OVERLAY - ABSOLUTE CENTER */}
            <motion.div
-              style={{ opacity: heroTextOpacity, y: heroTextY, scale: heroTextScale }}
-              className="absolute z-50 flex flex-col items-center justify-center pointer-events-none mb-12"
+              style={{ opacity: heroTextOpacity }}
+              className="absolute inset-0 z-50"
            >
-              <h2 className="text-white text-6xl md:text-8xl font-black tracking-tighter uppercase text-center drop-shadow-2xl">
-                HI I&apos;m <span className="text-[#E85002]">UMYAL</span>
-              </h2>
+              <HeroScene />
            </motion.div>
 
            {/* MAIN CONTENT WRAPPER */}

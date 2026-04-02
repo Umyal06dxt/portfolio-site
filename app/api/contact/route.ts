@@ -13,21 +13,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${resendKey}`,
-    },
-    body: JSON.stringify({
-      from: "portfolio@umyal.dev",
-      to: "hello@umyal.dev",
-      subject: `[Portfolio] ${subject || "New message"} — from ${name}`,
-      text: `From: ${name} <${email}>\n\n${message}`,
-    }),
-  });
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${resendKey}`,
+      },
+      body: JSON.stringify({
+        from: "portfolio@umyal.dev",
+        to: "hello@umyal.dev",
+        subject: `[Portfolio] ${subject || "New message"} — from ${name}`,
+        text: `From: ${name} <${email}>\n\n${message}`,
+      }),
+    });
 
-  if (!res.ok) {
+    if (!res.ok) {
+      return NextResponse.json({ error: "Failed to send" }, { status: 500 });
+    }
+  } catch {
     return NextResponse.json({ error: "Failed to send" }, { status: 500 });
   }
 

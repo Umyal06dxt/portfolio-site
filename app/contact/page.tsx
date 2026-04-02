@@ -112,8 +112,9 @@ export default function ContactPage() {
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="font-mono text-[9px] text-white/30 uppercase tracking-widest">Name</label>
+                <label htmlFor="contact-name" className="font-mono text-[9px] text-white/30 uppercase tracking-widest">Name</label>
                 <input
+                  id="contact-name"
                   required
                   value={form.name}
                   onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
@@ -123,8 +124,9 @@ export default function ContactPage() {
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="font-mono text-[9px] text-white/30 uppercase tracking-widest">Email</label>
+                <label htmlFor="contact-email" className="font-mono text-[9px] text-white/30 uppercase tracking-widest">Email</label>
                 <input
+                  id="contact-email"
                   required
                   type="email"
                   value={form.email}
@@ -135,8 +137,9 @@ export default function ContactPage() {
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="font-mono text-[9px] text-white/30 uppercase tracking-widest">Subject</label>
+                <label htmlFor="contact-subject" className="font-mono text-[9px] text-white/30 uppercase tracking-widest">Subject</label>
                 <select
+                  id="contact-subject"
                   value={form.subject}
                   onChange={(e) => setForm((f) => ({ ...f, subject: e.target.value }))}
                   className="bg-[#050505] border border-white/10 px-4 py-3 font-mono text-sm text-white/60 focus:outline-none focus:border-[#E85002] transition-colors"
@@ -149,8 +152,9 @@ export default function ContactPage() {
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="font-mono text-[9px] text-white/30 uppercase tracking-widest">Message</label>
+                <label htmlFor="contact-message" className="font-mono text-[9px] text-white/30 uppercase tracking-widest">Message</label>
                 <textarea
+                  id="contact-message"
                   required
                   rows={5}
                   value={form.message}

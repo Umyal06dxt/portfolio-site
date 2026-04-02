@@ -1,8 +1,13 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
+
+const ROTATION_LIMITS = {
+  hero: { maxY: 0.4, maxX: 0.2 },
+  card: { maxY: 0.15, maxX: 0.08 },
+} as const;
 
 interface AvatarMeshProps {
   mode: "hero" | "card";
@@ -17,53 +22,39 @@ function AvatarMesh({ mode, interactive }: AvatarMeshProps) {
   const targetRotation = useRef({ x: 0, y: 0 });
   const currentRotation = useRef({ x: 0, y: 0 });
 
-  const maxY = mode === "hero" ? 0.4 : 0.15;
-  const maxX = mode === "hero" ? 0.2 : 0.08;
-
   const headGeom = useMemo(() => {
     const geom = new THREE.OctahedronGeometry(0.55, 1);
     geom.applyMatrix4(new THREE.Matrix4().makeScale(1.15, 1.0, 0.9));
     return geom;
   }, []);
 
+  useEffect(() => {
+    return () => { headGeom.dispose(); };
+  }, [headGeom]);
+
   useFrame(({ pointer, clock }) => {
+    const { maxY, maxX } = ROTATION_LIMITS[mode];
     if (interactive) {
       targetRotation.current.y = pointer.x * maxY;
       targetRotation.current.x = -pointer.y * maxX;
-    }
-
-    if (interactive) {
-      currentRotation.current.y = THREE.MathUtils.lerp(
-        currentRotation.current.y,
-        targetRotation.current.y,
-        0.05
-      );
-      currentRotation.current.x = THREE.MathUtils.lerp(
-        currentRotation.current.x,
-        targetRotation.current.x,
-        0.05
-      );
-    }
-
-    if (headRef.current) {
-      if (interactive) {
+      currentRotation.current.y = THREE.MathUtils.lerp(currentRotation.current.y, targetRotation.current.y, 0.05);
+      currentRotation.current.x = THREE.MathUtils.lerp(currentRotation.current.x, targetRotation.current.x, 0.05);
+      if (headRef.current) {
         headRef.current.rotation.y = currentRotation.current.y;
         headRef.current.rotation.x = currentRotation.current.x;
       }
-      if (mode === "card") {
-        headRef.current.rotation.y += Math.sin(clock.elapsedTime) * 0.04;
-      }
-    }
-
-    if (interactive) {
       const eyeShift = currentRotation.current.y * 0.08;
       if (leftEyeRef.current) leftEyeRef.current.position.x = -0.18 + eyeShift;
       if (rightEyeRef.current) rightEyeRef.current.position.x = 0.18 + eyeShift;
     }
+    // Card idle bob always runs (outside the interactive guard)
+    if (mode === "card" && headRef.current) {
+      headRef.current.rotation.y = Math.sin(clock.elapsedTime) * 0.04;
+    }
   });
 
   return (
-    <group position={[0, 0, 0]}>
+    <group>
       <mesh ref={headRef} geometry={headGeom}>
         <meshPhongMaterial color="#E85002" flatShading shininess={10} />
       </mesh>

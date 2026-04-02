@@ -6,9 +6,10 @@ import * as THREE from "three";
 
 interface AvatarMeshProps {
   mode: "hero" | "card";
+  interactive: boolean;
 }
 
-function AvatarMesh({ mode }: AvatarMeshProps) {
+function AvatarMesh({ mode, interactive }: AvatarMeshProps) {
   const headRef = useRef<THREE.Mesh>(null!);
   const leftEyeRef = useRef<THREE.Mesh>(null!);
   const rightEyeRef = useRef<THREE.Mesh>(null!);
@@ -26,31 +27,39 @@ function AvatarMesh({ mode }: AvatarMeshProps) {
   }, []);
 
   useFrame(({ pointer, clock }) => {
-    targetRotation.current.y = pointer.x * maxY;
-    targetRotation.current.x = -pointer.y * maxX;
+    if (interactive) {
+      targetRotation.current.y = pointer.x * maxY;
+      targetRotation.current.x = -pointer.y * maxX;
+    }
 
-    currentRotation.current.y = THREE.MathUtils.lerp(
-      currentRotation.current.y,
-      targetRotation.current.y,
-      0.05
-    );
-    currentRotation.current.x = THREE.MathUtils.lerp(
-      currentRotation.current.x,
-      targetRotation.current.x,
-      0.05
-    );
+    if (interactive) {
+      currentRotation.current.y = THREE.MathUtils.lerp(
+        currentRotation.current.y,
+        targetRotation.current.y,
+        0.05
+      );
+      currentRotation.current.x = THREE.MathUtils.lerp(
+        currentRotation.current.x,
+        targetRotation.current.x,
+        0.05
+      );
+    }
 
     if (headRef.current) {
-      headRef.current.rotation.y = currentRotation.current.y;
-      headRef.current.rotation.x = currentRotation.current.x;
+      if (interactive) {
+        headRef.current.rotation.y = currentRotation.current.y;
+        headRef.current.rotation.x = currentRotation.current.x;
+      }
       if (mode === "card") {
-        headRef.current.rotation.y += Math.sin(clock.elapsedTime) * 0.002;
+        headRef.current.rotation.y += Math.sin(clock.elapsedTime) * 0.04;
       }
     }
 
-    const eyeShift = currentRotation.current.y * 0.08;
-    if (leftEyeRef.current) leftEyeRef.current.position.x = -0.18 + eyeShift;
-    if (rightEyeRef.current) rightEyeRef.current.position.x = 0.18 + eyeShift;
+    if (interactive) {
+      const eyeShift = currentRotation.current.y * 0.08;
+      if (leftEyeRef.current) leftEyeRef.current.position.x = -0.18 + eyeShift;
+      if (rightEyeRef.current) rightEyeRef.current.position.x = 0.18 + eyeShift;
+    }
   });
 
   return (
@@ -100,7 +109,7 @@ export default function AvatarScene({
       <ambientLight intensity={0.4} color="#fff5e0" />
       <pointLight position={[2, 3, 2]} intensity={1.2} color="#fff5e0" />
       <pointLight position={[-1, -2, 1]} intensity={0.6} color="#E85002" />
-      <AvatarMesh mode={mode} />
+      <AvatarMesh mode={mode} interactive={interactive} />
     </Canvas>
   );
 }

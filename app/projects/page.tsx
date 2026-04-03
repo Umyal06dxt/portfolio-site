@@ -1,8 +1,8 @@
 "use client";
 
+import Navbar from "@/components/navbar";
 import { NetflixHero } from "@/components/netflix/hero";
 import { NetflixRow } from "@/components/netflix/row";
-// Note: If Navbar doesn't exist, I'll allow globalx     nav to handle it or build a simple netflix header.
 
 // Mock Data
 const trending = [
@@ -25,17 +25,7 @@ export default function ProjectsPage() {
   return (
     <div className="bg-[#141414] min-h-screen text-white overflow-x-hidden pb-20">
 
-      {/* Netflix Header (Simple) */}
-      <div className="fixed top-0 w-full z-50 flex items-center justify-between px-12 py-4 bg-gradient-to-b from-black/80 to-transparent transition-all">
-         <img src="/logo.svg" className="h-8 w-auto text-[#E50914]" alt="LOGO" />
-         {/* If logo empty, text */}
-         <div className="flex gap-6 text-sm font-medium">
-            <a href="/" className="hover:text-gray-300 transition-colors">Home</a>
-            <a href="#" className="font-bold">Projects</a>
-            <a href="/gallery" className="hover:text-gray-300 transition-colors">Gallery</a>
-            <a href="#" className="hover:text-gray-300 transition-colors">My List</a>
-         </div>
-      </div>
+      <Navbar />
 
       <NetflixHero />
 

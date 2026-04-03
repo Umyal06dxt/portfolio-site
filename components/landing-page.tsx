@@ -1,6 +1,8 @@
 "use client";
 
-import DistortImageCanvas from "@/components/distort-image";
+import AvatarScene from "@/components/avatar-scene";
+import HeroScene from "@/components/hero-scene";
+import Navbar from "@/components/navbar";
 import { BentoGridItem } from "@/components/ui/bento-grid";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowUpRight, Brain, Cpu, Linkedin, Mail, MoveRight, Palette, Radio, Terminal } from "lucide-react";
@@ -99,12 +101,8 @@ const items: Item[] = [
     title: "",
     description: "",
     header: (
-      <div className="relative w-full h-full min-h-[500px] flex items-center justify-center overflow-hidden ">
-        {/* Distort Effect Component */}
-        <div className="absolute left-0 right-0 bottom-0 top-16 w-full transition-all duration-700 pointer-events-auto">
-            <DistortImageCanvas canvasImage="/mex.png" revealImage="/mexc.png" blockSize={15} objectFit="contain" />
-        </div>
-
+      <div className="relative w-full h-full min-h-[500px] flex items-center justify-center overflow-hidden">
+        <AvatarScene mode="card" interactive={true} />
       </div>
     ),
     className: "md:col-span-1 md:row-span-2 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] border-white/5 transition-colors duration-500 hover:border-white/20",
@@ -202,9 +200,9 @@ const items: Item[] = [
             </div>
 
             <div className="mt-8 md:mt-0 relative z-10">
-                 <div className="px-6 py-4 border-2 border-[#E85002] text-[#E85002] font-bold text-sm hover:bg-[#E85002] hover:text-black transition-all cursor-pointer uppercase tracking-widest shadow-[4px_4px_0px_#E85002]">
+                 <Link href="/contact" className="px-6 py-4 border-2 border-[#E85002] text-[#E85002] font-bold text-sm hover:bg-[#E85002] hover:text-black transition-all uppercase tracking-widest shadow-[4px_4px_0px_#E85002]">
                     INITIATE_CONTACT
-                 </div>
+                 </Link>
             </div>
         </div>
     ),
@@ -236,8 +234,6 @@ export default function LandingPage() {
 
   // 2. Main Hero Text: Visible initially, fades out quickly
   const heroTextOpacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
-  const heroTextY = useTransform(smoothProgress, [0, 0.2], [0, -100]);
-  const heroTextScale = useTransform(smoothProgress, [0, 0.2], [1, 0.8]);
 
   // 3. Side & Bottom Columns: Fade in ONLY after we zoom out significantly
   const sideColsOpacity = useTransform(smoothProgress, [0.25, 0.5], [0, 1]);
@@ -256,6 +252,7 @@ export default function LandingPage() {
 
   return (
     <div ref={containerRef} className="relative min-h-[400vh] bg-black">
+      <Navbar />
 
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
 
@@ -271,12 +268,10 @@ export default function LandingPage() {
 
            {/* INITIAL HERO TEXT OVERLAY - ABSOLUTE CENTER */}
            <motion.div
-              style={{ opacity: heroTextOpacity, y: heroTextY, scale: heroTextScale }}
-              className="absolute z-50 flex flex-col items-center justify-center pointer-events-none mb-12"
+              style={{ opacity: heroTextOpacity }}
+              className="absolute inset-0 z-50"
            >
-              <h2 className="text-white text-6xl md:text-8xl font-black tracking-tighter uppercase text-center drop-shadow-2xl">
-                HI I&apos;m <span className="text-[#E85002]">UMYAL</span>
-              </h2>
+              <HeroScene />
            </motion.div>
 
            {/* MAIN CONTENT WRAPPER */}

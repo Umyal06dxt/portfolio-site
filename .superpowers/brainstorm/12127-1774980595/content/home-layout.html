@@ -1,0 +1,113 @@
+<h2>Home Page — Entry Flow</h2>
+<p class="subtitle">The full journey from first load → bento grid. Does this structure feel right?</p>
+
+<div class="mockup">
+  <div class="mockup-header">PHASE 1 — First Load (0% scroll)</div>
+  <div class="mockup-body" style="background:#050505;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.06);">
+    <!-- Grid bg -->
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:40px 40px;"></div>
+    <!-- Particle dots -->
+    <div style="position:absolute;width:3px;height:3px;background:#E85002;border-radius:50%;top:15%;left:20%;box-shadow:0 0 8px #E85002;opacity:0.6"></div>
+    <div style="position:absolute;width:2px;height:2px;background:#E85002;border-radius:50%;top:70%;left:75%;box-shadow:0 0 6px #E85002;opacity:0.4"></div>
+    <div style="position:absolute;width:2px;height:2px;background:#E85002;border-radius:50%;top:30%;right:15%;box-shadow:0 0 6px #E85002;opacity:0.3"></div>
+    <div style="position:absolute;width:3px;height:3px;background:#E85002;border-radius:50%;bottom:20%;left:30%;box-shadow:0 0 8px #E85002;opacity:0.5"></div>
+
+    <!-- 3D Avatar placeholder -->
+    <div style="position:relative;z-index:10;margin-bottom:24px;">
+      <svg viewBox="0 0 120 160" width="120" height="160">
+        <polygon points="60,4 100,28 108,80 78,128 42,128 12,80 20,28" fill="#E85002" opacity="0.85"/>
+        <polygon points="60,4 100,28 82,56 60,44" fill="#c46000" opacity="0.7"/>
+        <polygon points="20,28 60,44 36,72 12,80" fill="#ff6820" opacity="0.5"/>
+        <polygon points="60,44 82,56 78,100 60,96 42,100 36,72" fill="#0a0a18" opacity="0.9"/>
+        <!-- Glowing eyes -->
+        <rect x="32" y="64" width="18" height="10" rx="2" fill="#E85002"/>
+        <rect x="70" y="64" width="18" height="10" rx="2" fill="#E85002"/>
+        <rect x="33" y="65" width="16" height="8" rx="1" fill="white" opacity="0.9"/>
+        <rect x="71" y="65" width="16" height="8" rx="1" fill="white" opacity="0.9"/>
+        <!-- Pupils tracking right (hover state suggestion) -->
+        <circle cx="42" cy="69" r="3" fill="#E85002"/>
+        <circle cx="80" cy="69" r="3" fill="#E85002"/>
+        <!-- Neck -->
+        <rect x="51" y="128" width="18" height="14" fill="#1a0a00"/>
+        <!-- Shoulders -->
+        <rect x="10" y="142" width="100" height="18" rx="3" fill="#0f0f1a"/>
+        <!-- Orange shoulder edge -->
+        <rect x="10" y="142" width="100" height="2" fill="#E85002" opacity="0.4"/>
+        <!-- Glow -->
+        <ellipse cx="60" cy="80" rx="55" ry="70" fill="none" stroke="#E85002" stroke-width="0.5" opacity="0.2"/>
+      </svg>
+      <!-- Mouse tracking label -->
+      <div style="position:absolute;top:40px;right:-80px;font-family:monospace;font-size:9px;color:#E85002;opacity:0.7;white-space:nowrap;">← TRACKS CURSOR</div>
+    </div>
+
+    <!-- Name + title -->
+    <div style="z-index:10;text-align:center;">
+      <h1 style="font-family:sans-serif;font-size:36px;font-weight:900;color:white;letter-spacing:-2px;margin:0;text-transform:uppercase;">UMYAL DIXIT</h1>
+      <p style="font-family:monospace;font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:4px;margin:8px 0 0;text-transform:uppercase;">// Creative Engineer</p>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);z-index:10;text-align:center;">
+      <p style="font-family:monospace;font-size:9px;color:rgba(255,255,255,0.3);letter-spacing:3px;text-transform:uppercase;margin:0 0 6px">SCROLL</p>
+      <div style="width:1px;height:24px;background:linear-gradient(to bottom,#E85002,transparent);margin:0 auto;"></div>
+    </div>
+  </div>
+</div>
+
+<div style="display:flex;align-items:center;justify-content:center;gap:16px;padding:12px 0;">
+  <div style="height:1px;flex:1;background:rgba(255,255,255,0.06)"></div>
+  <p style="font-family:monospace;font-size:10px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:2px;margin:0">↓ SCROLL</p>
+  <div style="height:1px;flex:1;background:rgba(255,255,255,0.06)"></div>
+</div>
+
+<div class="mockup">
+  <div class="mockup-header">PHASE 2 — After Scroll (50–100% scroll progress)</div>
+  <div class="mockup-body" style="background:#050505;padding:16px;border:1px solid rgba(255,255,255,0.06);">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+
+      <!-- Left col -->
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="height:100px;background:#0a0a0a;border:1px solid rgba(255,255,255,0.1);padding:10px;font-family:monospace;font-size:9px;color:rgba(255,255,255,0.5);">
+          <div style="color:#E85002;margin-bottom:6px;font-size:8px;">NET.STATUS: ONLINE</div>
+          <div style="border:1px solid rgba(255,255,255,0.1);padding:4px 6px;margin-bottom:4px;font-size:8px;">LinkedIn ↗</div>
+          <div style="border:1px solid rgba(255,255,255,0.1);padding:4px 6px;font-size:8px;">Twitter ↗</div>
+        </div>
+        <div style="height:80px;background:#0a0a0a;border:1px solid rgba(255,255,255,0.1);padding:10px;font-family:monospace;font-size:9px;color:rgba(255,255,255,0.5);">
+          GALLERY
+        </div>
+      </div>
+
+      <!-- Center: avatar shrinks into card -->
+      <div style="height:192px;background:#080808;border:1px solid rgba(232,80,2,0.3);display:flex;align-items:center;justify-content:center;position:relative;">
+        <svg viewBox="0 0 60 80" width="54" height="72" style="opacity:0.9">
+          <polygon points="30,2 52,14 56,44 40,66 20,66 4,44 8,14" fill="#E85002" opacity="0.85"/>
+          <rect x="15" y="32" width="9" height="5" rx="1" fill="white" opacity="0.9"/>
+          <rect x="36" y="32" width="9" height="5" rx="1" fill="white" opacity="0.9"/>
+          <circle cx="19.5" cy="34.5" r="2" fill="#E85002"/>
+          <circle cx="40.5" cy="34.5" r="2" fill="#E85002"/>
+        </svg>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:30px;background:radial-gradient(circle at bottom,rgba(232,80,2,0.3),transparent);"></div>
+        <div style="position:absolute;top:6px;right:6px;font-family:monospace;font-size:7px;color:rgba(232,80,2,0.6);">UMYAL.DEV</div>
+      </div>
+
+      <!-- Right col -->
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="height:116px;background:#0a0a0a;border:1px solid rgba(232,80,2,0.3);padding:10px;font-family:monospace;font-size:9px;color:rgba(255,255,255,0.5);">
+          <div style="color:#E85002;font-size:8px;margin-bottom:4px;">NETFLIX STYLE</div>
+          <div style="font-size:11px;color:white;font-weight:bold;">View All →</div>
+        </div>
+        <div style="height:36px;background:#0a0a0a;border:1px solid rgba(255,255,255,0.1);padding:6px;font-family:monospace;font-size:8px;color:rgba(255,255,255,0.5);">AI Learning</div>
+        <div style="height:36px;background:#0a0a0a;border:1px solid rgba(255,255,255,0.1);padding:6px;font-family:monospace;font-size:8px;color:rgba(255,255,255,0.5);">Genco</div>
+      </div>
+    </div>
+
+    <!-- Bottom row -->
+    <div style="margin-top:8px;height:60px;background:#0a0a0a;border:1px solid rgba(255,255,255,0.1);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;">
+      <p style="font-family:sans-serif;font-size:13px;font-weight:900;color:white;text-transform:uppercase;margin:0;">BRIDGING <span style="color:#E85002">CHAOS</span> & LOGIC.</p>
+      <div style="border:2px solid #E85002;padding:4px 10px;font-family:monospace;font-size:8px;color:#E85002;text-transform:uppercase;">INITIATE_CONTACT</div>
+    </div>
+  </div>
+</div>
+
+<p class="subtitle" style="margin-top:1.5rem;text-align:center;">Does this entry flow feel right? Any changes before we go deeper?</p>

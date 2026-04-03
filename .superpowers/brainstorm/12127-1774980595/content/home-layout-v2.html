@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Home Layout</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#050505; color:white; font-family:'Courier New',monospace; }
+
+  /* ── PHASE LABEL ─────────────────────────────── */
+  .phase-label {
+    display:flex; align-items:center; gap:12px;
+    padding:14px 32px;
+    background:#0a0a0a;
+    border-bottom:1px solid rgba(255,255,255,0.07);
+    font-size:10px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.35);
+  }
+  .phase-label span { color:#E85002; }
+
+  /* ── DIVIDER ──────────────────────────────────── */
+  .divider {
+    display:flex; align-items:center; gap:16px;
+    padding:18px 32px;
+    background:#050505;
+  }
+  .divider-line { flex:1; height:1px; background:rgba(255,255,255,0.06); }
+  .divider-text { font-size:9px; letter-spacing:4px; text-transform:uppercase; color:rgba(255,255,255,0.2); }
+
+  /* ═══════════════════════════════════════════════
+     PHASE 1 — HERO
+  ═══════════════════════════════════════════════ */
+  .hero {
+    position:relative; height:520px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .hero-grid {
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.028) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,0.028) 1px,transparent 1px);
+    background-size:44px 44px;
+  }
+  .hero-vignette {
+    position:absolute; inset:0;
+    background:radial-gradient(ellipse at center, transparent 30%, #050505 90%);
+  }
+  /* corner labels */
+  .corner { position:absolute; font-size:8px; letter-spacing:2px; color:rgba(255,255,255,0.18); text-transform:uppercase; }
+  .corner-tl { top:20px; left:24px; }
+  .corner-tr { top:20px; right:24px; text-align:right; }
+  .corner-bl { bottom:20px; left:24px; }
+  .corner-br { bottom:20px; right:24px; text-align:right; }
+
+  /* particles */
+  .particle {
+    position:absolute; border-radius:50%;
+    background:#E85002; box-shadow:0 0 10px #E85002;
+  }
+
+  /* crosshair reticle */
+  .reticle {
+    position:absolute; border:1px solid rgba(232,80,2,0.25); border-radius:50%;
+    animation: reticle-pulse 3s ease-in-out infinite;
+  }
+  @keyframes reticle-pulse { 0%,100%{opacity:0.3;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.04)} }
+
+  /* avatar */
+  .avatar-wrap { position:relative; z-index:10; margin-bottom:28px; }
+  .avatar-glow {
+    position:absolute; inset:-20px;
+    background:radial-gradient(circle at center, rgba(232,80,2,0.18) 0%, transparent 70%);
+    border-radius:50%;
+  }
+
+  /* text block */
+  .hero-text { position:relative; z-index:10; text-align:center; }
+  .hero-name {
+    font-family:'Arial Black',sans-serif;
+    font-size:52px; font-weight:900; letter-spacing:-3px;
+    text-transform:uppercase; line-height:1;
+    background:linear-gradient(180deg,#fff 60%,rgba(255,255,255,0.5));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .hero-name em { font-style:normal; -webkit-text-fill-color:#E85002; }
+  .hero-sub {
+    margin-top:10px; font-size:10px; letter-spacing:5px;
+    text-transform:uppercase; color:rgba(255,255,255,0.35);
+  }
+  .hero-sub span { color:#E85002; }
+
+  /* nav bar */
+  .nav {
+    position:absolute; top:0; left:0; right:0; z-index:20;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px;
+    border-bottom:1px solid rgba(255,255,255,0.05);
+  }
+  .nav-logo { font-size:13px; font-weight:700; letter-spacing:2px; color:white; text-transform:uppercase; }
+  .nav-logo em { font-style:normal; color:#E85002; }
+  .nav-links { display:flex; gap:28px; }
+  .nav-link { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.4); }
+  .nav-link.active { color:#E85002; }
+  .nav-cta {
+    font-size:8px; letter-spacing:2px; text-transform:uppercase;
+    border:1px solid rgba(232,80,2,0.5); color:#E85002;
+    padding:6px 14px;
+  }
+
+  /* scroll indicator */
+  .scroll-hint {
+    position:absolute; bottom:24px; left:50%; transform:translateX(-50%);
+    z-index:10; display:flex; flex-direction:column; align-items:center; gap:6px;
+  }
+  .scroll-hint p { font-size:8px; letter-spacing:4px; text-transform:uppercase; color:rgba(255,255,255,0.25); }
+  .scroll-line { width:1px; height:32px; background:linear-gradient(to bottom,#E85002,transparent); }
+  .scroll-dot { width:4px; height:4px; background:#E85002; border-radius:50%; box-shadow:0 0 6px #E85002; animation:scroll-bob 1.8s ease-in-out infinite; }
+  @keyframes scroll-bob { 0%,100%{transform:translateY(0);opacity:1} 50%{transform:translateY(8px);opacity:0.4} }
+
+  /* ═══════════════════════════════════════════════
+     PHASE 2 — BENTO GRID
+  ═══════════════════════════════════════════════ */
+  .bento-scene {
+    padding:24px 32px 32px;
+    background:#050505;
+    position:relative;
+  }
+  .bento-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  .bento-grid-row { display:contents; }
+
+  .cell {
+    background:#080808;
+    border:1px solid rgba(255,255,255,0.08);
+    position:relative; overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .cell-inner { padding:14px 16px; flex:1; display:flex; flex-direction:column; }
+  .cell-tag { font-size:7px; letter-spacing:3px; text-transform:uppercase; color:#E85002; margin-bottom:6px; }
+  .cell-title { font-size:13px; font-weight:700; color:white; text-transform:uppercase; letter-spacing:-0.5px; }
+  .cell-sub { font-size:8px; color:rgba(255,255,255,0.35); margin-top:4px; }
+  .cell-accent { position:absolute; bottom:0; left:0; right:0; height:1px; background:#E85002; opacity:0.4; }
+  .cell-dot { width:6px; height:6px; border-radius:50%; background:#E85002; box-shadow:0 0 8px #E85002; }
+
+  /* center avatar cell */
+  .cell-avatar {
+    background:#080808;
+    border:1px solid rgba(232,80,2,0.25);
+    grid-row: span 2;
+    position:relative; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .cell-avatar-glow {
+    position:absolute; bottom:0; left:0; right:0; height:50%;
+    background:radial-gradient(ellipse at bottom, rgba(232,80,2,0.2) 0%, transparent 70%);
+  }
+  .cell-avatar-label {
+    position:absolute; top:10px; right:10px;
+    font-size:7px; letter-spacing:2px; color:rgba(232,80,2,0.5); text-transform:uppercase;
+  }
+  .cell-avatar-name {
+    position:absolute; bottom:14px; left:0; right:0; text-align:center;
+    font-size:8px; letter-spacing:4px; color:rgba(255,255,255,0.4); text-transform:uppercase;
+  }
+
+  /* links cell */
+  .cell-links { background:#080808; border:1px solid rgba(255,255,255,0.08); }
+  .link-row {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:9px 14px; border-bottom:1px solid rgba(255,255,255,0.05);
+    font-size:8px; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,0.4);
+  }
+  .link-row:last-child { border-bottom:none; }
+  .link-arrow { color:rgba(232,80,2,0.5); }
+
+  /* bottom row */
+  .bottom-row {
+    grid-column:1/-1;
+    background:#080808;
+    border:1px solid rgba(255,255,255,0.08);
+    height:70px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 24px;
+    margin-top:0;
+    position:relative; overflow:hidden;
+  }
+  .bottom-bg-text {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    font-size:64px; font-weight:900; text-transform:uppercase;
+    color:transparent; -webkit-text-stroke:1px rgba(255,255,255,0.04);
+    white-space:nowrap; letter-spacing:-2px; pointer-events:none;
+  }
+  .bottom-tagline { font-family:'Arial Black',sans-serif; font-size:16px; font-weight:900; text-transform:uppercase; letter-spacing:-0.5px; }
+  .bottom-tagline em { font-style:normal; color:#E85002; }
+  .bottom-cta {
+    border:2px solid #E85002; color:#E85002;
+    padding:7px 16px; font-size:8px; letter-spacing:2px; text-transform:uppercase;
+    box-shadow:3px 3px 0 rgba(232,80,2,0.3);
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV (shown in both phases) ── -->
+
+<!-- ══════════════════════════════════
+     PHASE 1 — HERO
+══════════════════════════════════ -->
+<div class="phase-label"><span>Phase 01</span> / First Load — Full Viewport Hero</div>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-vignette"></div>
+
+  <!-- Reticles -->
+  <div class="reticle" style="width:280px;height:280px;top:50%;left:50%;transform:translate(-50%,-52%)"></div>
+  <div class="reticle" style="width:380px;height:380px;top:50%;left:50%;transform:translate(-50%,-52%);animation-delay:.8s"></div>
+
+  <!-- Particles -->
+  <div class="particle" style="width:3px;height:3px;top:18%;left:22%;opacity:.7"></div>
+  <div class="particle" style="width:2px;height:2px;top:65%;left:78%;opacity:.4"></div>
+  <div class="particle" style="width:3px;height:3px;top:28%;right:18%;opacity:.5"></div>
+  <div class="particle" style="width:2px;height:2px;bottom:25%;left:35%;opacity:.6"></div>
+  <div class="particle" style="width:4px;height:4px;top:45%;left:12%;opacity:.3"></div>
+  <div class="particle" style="width:2px;height:2px;bottom:35%;right:25%;opacity:.5"></div>
+
+  <!-- Corner labels -->
+  <div class="corner corner-tl">UMYAL.DEV<br/><span style="color:#E85002">◆ LIVE</span></div>
+  <div class="corner corner-tr">EST. 2024<br/>v3.0</div>
+  <div class="corner corner-bl">DELHI, IN<br/>23:41:07</div>
+  <div class="corner corner-br">CREATIVE<br/>ENGINEER</div>
+
+  <!-- Nav -->
+  <div class="nav">
+    <div class="nav-logo">U<em>.</em>DIXIT</div>
+    <div class="nav-links">
+      <div class="nav-link active">Home</div>
+      <div class="nav-link">Projects</div>
+      <div class="nav-link">About</div>
+      <div class="nav-link">Blog</div>
+      <div class="nav-link">Gallery</div>
+    </div>
+    <div class="nav-cta">Contact</div>
+  </div>
+
+  <!-- Avatar -->
+  <div class="avatar-wrap">
+    <div class="avatar-glow"></div>
+    <svg viewBox="0 0 140 185" width="140" height="185" style="position:relative;z-index:1;filter:drop-shadow(0 0 20px rgba(232,80,2,0.4))">
+      <!-- Main head polygon -->
+      <polygon points="70,5 118,32 126,95 92,148 48,148 14,95 22,32" fill="#E85002" opacity="0.88"/>
+      <!-- Face shading facets -->
+      <polygon points="70,5 118,32 96,62 70,50" fill="#BF4500" opacity="0.75"/>
+      <polygon points="22,32 70,50 42,78 14,95" fill="#FF6B20" opacity="0.5"/>
+      <polygon points="70,50 96,62 92,112 70,108 48,112 42,78" fill="#050510" opacity="0.92"/>
+      <!-- Brow ridge -->
+      <polygon points="40,68 70,60 100,68 96,72 70,64 44,72" fill="#c46000" opacity="0.5"/>
+      <!-- Eyes -->
+      <rect x="35" y="73" width="24" height="13" rx="2" fill="#0a0a18"/>
+      <rect x="81" y="73" width="24" height="13" rx="2" fill="#0a0a18"/>
+      <rect x="36" y="74" width="22" height="11" rx="1.5" fill="white" opacity="0.92"/>
+      <rect x="82" y="74" width="22" height="11" rx="1.5" fill="white" opacity="0.92"/>
+      <!-- Irises -->
+      <circle cx="50" cy="79.5" r="4.5" fill="#E85002"/>
+      <circle cx="93" cy="79.5" r="4.5" fill="#E85002"/>
+      <!-- Pupils -->
+      <circle cx="51" cy="79.5" r="2.5" fill="#0a0000"/>
+      <circle cx="94" cy="79.5" r="2.5" fill="#0a0000"/>
+      <!-- Eye shine -->
+      <circle cx="52" cy="78" r="1" fill="white" opacity="0.8"/>
+      <circle cx="95" cy="78" r="1" fill="white" opacity="0.8"/>
+      <!-- Nose (subtle) -->
+      <polygon points="70,95 64,108 76,108" fill="#BF4500" opacity="0.4"/>
+      <!-- Mouth -->
+      <rect x="54" y="118" width="32" height="5" rx="2.5" fill="#BF4500" opacity="0.6"/>
+      <!-- Jaw line facet -->
+      <polygon points="48,148 92,148 86,135 54,135" fill="#BF4500" opacity="0.4"/>
+      <!-- Neck -->
+      <rect x="59" y="148" width="22" height="18" fill="#1a0800"/>
+      <!-- Shoulders -->
+      <rect x="8" y="166" width="124" height="19" rx="3" fill="#0f0f1a"/>
+      <rect x="8" y="166" width="124" height="2" fill="#E85002" opacity="0.35"/>
+      <!-- Chest detail line -->
+      <line x1="52" y1="175" x2="88" y2="175" stroke="#E85002" stroke-width="0.5" opacity="0.3"/>
+      <!-- Outer glow ring -->
+      <ellipse cx="70" cy="90" rx="66" ry="82" fill="none" stroke="#E85002" stroke-width="0.8" opacity="0.15"/>
+    </svg>
+    <!-- "tracks cursor" annotation -->
+    <div style="position:absolute;top:50px;right:-110px;font-size:8px;letter-spacing:1px;color:rgba(232,80,2,0.55);white-space:nowrap;">← EYES TRACK CURSOR</div>
+    <div style="position:absolute;top:62px;right:-110px;width:60px;height:1px;background:rgba(232,80,2,0.25);margin-top:4px;"></div>
+  </div>
+
+  <!-- Name -->
+  <div class="hero-text">
+    <div class="hero-name">UMYAL <em>DIXIT</em></div>
+    <div class="hero-sub">// <span>Creative</span> Engineer &nbsp;·&nbsp; Delhi, IN &nbsp;·&nbsp; Open to Work</div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="scroll-hint">
+    <p>Scroll</p>
+    <div class="scroll-line"></div>
+    <div class="scroll-dot"></div>
+  </div>
+</div>
+
+<!-- ── DIVIDER ── -->
+<div class="divider">
+  <div class="divider-line"></div>
+  <div class="divider-text">↓ Scroll Progress 50–100%</div>
+  <div class="divider-line"></div>
+</div>
+
+<!-- ══════════════════════════════════
+     PHASE 2 — BENTO GRID
+══════════════════════════════════ -->
+<div class="phase-label"><span>Phase 02</span> / After Scroll — Bento Grid Assembles</div>
+
+<div class="bento-scene">
+  <div class="bento-grid">
+
+    <!-- LEFT COL -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <!-- Connect card -->
+      <div class="cell-links cell" style="flex:1">
+        <div class="cell-inner" style="padding-bottom:0">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div class="cell-dot" style="animation:none"></div>
+            <div style="font-size:7px;letter-spacing:2px;color:rgba(255,255,255,0.2)">NET.STATUS: ONLINE</div>
+          </div>
+        </div>
+        <div class="link-row">LinkedIn <span class="link-arrow">↗</span></div>
+        <div class="link-row">𝕏 Twitter <span class="link-arrow">↗</span></div>
+        <div class="link-row">Email <span class="link-arrow">↗</span></div>
+      </div>
+      <!-- Gallery card -->
+      <div class="cell" style="flex:1;min-height:90px">
+        <div class="cell-inner" style="justify-content:flex-end">
+          <div class="cell-tag">Inspiration</div>
+          <div class="cell-title" style="font-size:22px;letter-spacing:-1px">GALLERY</div>
+          <div class="cell-sub">>> View Pins</div>
+        </div>
+        <div class="cell-accent"></div>
+      </div>
+    </div>
+
+    <!-- CENTER: Avatar lands here -->
+    <div class="cell-avatar" style="min-height:220px">
+      <div class="cell-avatar-glow"></div>
+      <div class="cell-avatar-label">UMYAL.DEV</div>
+      <svg viewBox="0 0 80 105" width="74" height="97" style="position:relative;z-index:1;filter:drop-shadow(0 0 12px rgba(232,80,2,0.5))">
+        <polygon points="40,3 68,18 72,54 52,84 28,84 8,54 12,18" fill="#E85002" opacity="0.88"/>
+        <polygon points="40,3 68,18 55,36 40,29" fill="#BF4500" opacity="0.75"/>
+        <polygon points="12,18 40,29 24,45 8,54" fill="#FF6B20" opacity="0.5"/>
+        <polygon points="40,29 55,36 52,64 40,62 28,64 24,45" fill="#050510" opacity="0.92"/>
+        <rect x="20" y="42" width="14" height="8" rx="1.5" fill="white" opacity="0.92"/>
+        <rect x="46" y="42" width="14" height="8" rx="1.5" fill="white" opacity="0.92"/>
+        <circle cx="28" cy="46" r="3" fill="#E85002"/>
+        <circle cx="53" cy="46" r="3" fill="#E85002"/>
+        <circle cx="29" cy="46" r="1.5" fill="#0a0000"/>
+        <circle cx="54" cy="46" r="1.5" fill="#0a0000"/>
+        <rect x="33" y="67" width="14" height="3" rx="1.5" fill="#BF4500" opacity="0.5"/>
+        <rect x="34" y="84" width="12" height="10" fill="#1a0800"/>
+        <rect x="4" y="94" width="72" height="11" rx="2" fill="#0f0f1a"/>
+        <rect x="4" y="94" width="72" height="1.5" fill="#E85002" opacity="0.35"/>
+      </svg>
+      <div class="cell-avatar-name">UMYAL DIXIT</div>
+    </div>
+
+    <!-- RIGHT COL -->
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <!-- Featured project -->
+      <div class="cell" style="flex:2;min-height:130px">
+        <div class="cell-inner" style="justify-content:space-between">
+          <div style="display:flex;justify-content:flex-end">
+            <div style="width:36px;height:36px;background:#E85002;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:black;">↗</div>
+          </div>
+          <div>
+            <div class="cell-tag">Netflix Style</div>
+            <div class="cell-title">View All<br/>Projects</div>
+          </div>
+        </div>
+      </div>
+      <!-- Two small project cards -->
+      <div style="display:flex;gap:10px;flex:1">
+        <div class="cell" style="flex:1;min-height:70px">
+          <div class="cell-inner" style="justify-content:space-between">
+            <div class="cell-tag">V.1.0</div>
+            <div class="cell-sub">AI Learning</div>
+          </div>
+        </div>
+        <div class="cell" style="flex:1;min-height:70px">
+          <div class="cell-inner" style="justify-content:space-between">
+            <div class="cell-tag">V.2.4</div>
+            <div class="cell-sub">Genco</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /bento-grid -->
+
+  <!-- BOTTOM ROW -->
+  <div class="bottom-row" style="margin-top:10px">
+    <div class="bottom-bg-text">DESIGN ENGINEER BUILD CREATE</div>
+    <div class="bottom-tagline">BRIDGING <em>CHAOS</em> &amp; LOGIC.</div>
+    <div class="bottom-cta">INITIATE_CONTACT</div>
+  </div>
+
+</div><!-- /bento-scene -->
+
+<div style="padding:20px 32px;text-align:center;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.2);text-transform:uppercase;border-top:1px solid rgba(255,255,255,0.05)">
+  Does this feel right? Tell me what to change →
+</div>
+
+<script src="http://localhost:62000/helper.js"></script>
+</body>
+</html>

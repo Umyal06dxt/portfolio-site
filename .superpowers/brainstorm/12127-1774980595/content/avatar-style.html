@@ -1,0 +1,106 @@
+<h2>What style should your 3D avatar be?</h2>
+<p class="subtitle">This is the interactive model that replaces your photo in the center card — it will look around when you move your mouse.</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="realistic" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a0a;display:flex;align-items:center;justify-content:center;height:180px;border-bottom:1px solid rgba(255,255,255,0.08);">
+      <div style="position:relative;width:100px;height:140px;">
+        <!-- Realistic head shape -->
+        <div style="width:80px;height:90px;background:linear-gradient(135deg,#c68642,#a0522d);border-radius:50% 50% 45% 45%;margin:0 auto;position:relative;box-shadow:0 8px 24px rgba(0,0,0,0.6);">
+          <!-- Eyes -->
+          <div style="position:absolute;top:38px;left:14px;width:14px;height:10px;background:#1a1a1a;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,0.5)"></div>
+          <div style="position:absolute;top:38px;right:14px;width:14px;height:10px;background:#1a1a1a;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,0.5)"></div>
+          <!-- Nose -->
+          <div style="position:absolute;top:52px;left:50%;transform:translateX(-50%);width:8px;height:6px;background:#8B4513;border-radius:50%"></div>
+          <!-- Mouth -->
+          <div style="position:absolute;top:64px;left:50%;transform:translateX(-50%);width:20px;height:4px;background:#8B3A3A;border-radius:2px"></div>
+          <!-- Hair -->
+          <div style="position:absolute;top:-6px;left:-4px;right:-4px;height:30px;background:#1a1a1a;border-radius:50% 50% 0 0;"></div>
+        </div>
+        <!-- Neck + Shoulders -->
+        <div style="width:30px;height:20px;background:#c68642;margin:0 auto;"></div>
+        <div style="width:100px;height:30px;background:#1a1a2e;border-radius:4px 4px 0 0;"></div>
+        <!-- Subtle glow -->
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 40%, rgba(232,80,2,0.15),transparent 70%);pointer-events:none;border-radius:50%"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Realistic / Stylized Human</h3>
+      <p>A high-quality 3D scan-like avatar that closely resembles you. Created with tools like Ready Player Me, Avaturn, or a custom sculpt. Most immersive — but requires a 3D model file of your likeness.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="lowpoly" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a0a;display:flex;align-items:center;justify-content:center;height:180px;border-bottom:1px solid rgba(255,255,255,0.08);">
+      <div style="position:relative;width:100px;height:140px;">
+        <!-- Low poly head -->
+        <svg viewBox="0 0 100 140" width="100" height="140">
+          <!-- Head polygon -->
+          <polygon points="50,5 85,30 90,75 65,110 35,110 10,75 15,30" fill="#E85002" opacity="0.9"/>
+          <!-- Face shadow facets -->
+          <polygon points="50,5 85,30 70,55 50,40" fill="#c46000" opacity="0.7"/>
+          <polygon points="15,30 50,40 30,65 10,75" fill="#ff6820" opacity="0.5"/>
+          <polygon points="50,40 70,55 65,85 50,80 35,85 30,65" fill="#1a1a2e" opacity="0.8"/>
+          <!-- Eyes (geometric) -->
+          <rect x="28" y="55" width="12" height="8" rx="1" fill="#0ff" opacity="0.9"/>
+          <rect x="60" y="55" width="12" height="8" rx="1" fill="#0ff" opacity="0.9"/>
+          <!-- Shoulders -->
+          <polygon points="20,115 80,115 95,140 5,140" fill="#1a1a2e"/>
+          <!-- Orange accent collar -->
+          <polygon points="35,110 65,110 72,120 28,120" fill="#E85002" opacity="0.8"/>
+        </svg>
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%, rgba(232,80,2,0.25),transparent 70%);pointer-events:none"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Low-Poly / Geometric</h3>
+      <p>A faceted, diamond-cut 3D representation. Abstract but clearly human. Fits your brutalist aesthetic perfectly. Built directly in Three.js with geometry — no external file needed.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="robot" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a0a;display:flex;align-items:center;justify-content:center;height:180px;border-bottom:1px solid rgba(255,255,255,0.08);">
+      <div style="position:relative;width:100px;height:140px;">
+        <svg viewBox="0 0 100 140" width="100" height="140">
+          <!-- Robot head box -->
+          <rect x="20" y="10" width="60" height="55" rx="4" fill="#1a1a2e" stroke="#E85002" stroke-width="1.5"/>
+          <!-- Screen face -->
+          <rect x="28" y="18" width="44" height="35" rx="2" fill="#050510"/>
+          <!-- Scan line glow -->
+          <rect x="28" y="18" width="44" height="35" rx="2" fill="none" stroke="#E85002" stroke-width="0.5" opacity="0.5"/>
+          <!-- Eyes (HUD style) -->
+          <rect x="33" y="28" width="14" height="8" rx="1" fill="#E85002" opacity="0.9"/>
+          <rect x="53" y="28" width="14" height="8" rx="1" fill="#E85002" opacity="0.9"/>
+          <!-- Scan line -->
+          <line x1="28" y1="42" x2="72" y2="42" stroke="#E85002" stroke-width="0.5" opacity="0.4"/>
+          <!-- Mouth display -->
+          <rect x="36" y="45" width="28" height="4" rx="1" fill="#E85002" opacity="0.5"/>
+          <!-- Antenna -->
+          <line x1="50" y1="10" x2="50" y2="2" stroke="#E85002" stroke-width="1.5"/>
+          <circle cx="50" cy="2" r="2" fill="#E85002"/>
+          <!-- Neck -->
+          <rect x="42" y="65" width="16" height="10" rx="1" fill="#1a1a2e" stroke="#E85002" stroke-width="1"/>
+          <!-- Shoulders -->
+          <rect x="5" y="75" width="90" height="35" rx="4" fill="#1a1a2e" stroke="#E85002" stroke-width="1"/>
+          <!-- Chest panel -->
+          <rect x="35" y="82" width="30" height="18" rx="2" fill="#050510" stroke="#E85002" stroke-width="0.5" opacity="0.6"/>
+          <circle cx="50" cy="91" r="4" fill="#E85002" opacity="0.6"/>
+          <!-- Glow -->
+          <radialGradient id="rg" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#E85002" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#E85002" stop-opacity="0"/>
+          </radialGradient>
+          <rect x="0" y="0" width="100" height="140" fill="url(#rg)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Cyber Robot / AI Entity</h3>
+      <p>A futuristic robot or AI-being that represents "Creative Engineer." Glowing HUD eyes, panel details, scan lines. Fits the tech/terminal aesthetic of your site. 100% built in Three.js — no file needed.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:1.5rem;text-align:center;">Click to select your preferred style — or tell me in the terminal if you have a different vision.</p>

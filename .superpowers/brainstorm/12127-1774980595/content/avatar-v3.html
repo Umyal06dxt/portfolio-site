@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Avatar v3 — Cute</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#050505; color:white;
+    font-family:'Courier New',monospace;
+    display:flex; flex-direction:column; align-items:center;
+    justify-content:center; min-height:100vh; padding:40px 20px; gap:32px;
+  }
+  h2 { font-size:10px; letter-spacing:4px; text-transform:uppercase; color:#E85002; text-align:center; }
+  .row { display:flex; gap:48px; align-items:center; justify-content:center; flex-wrap:wrap; }
+  .card {
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+    background:#080808; border:1px solid rgba(255,255,255,0.07); padding:32px 28px;
+  }
+  .lbl { font-size:8px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.3); }
+  .lbl em { font-style:normal; color:#E85002; }
+</style>
+</head>
+<body>
+
+<h2>// Avatar v3 — Cute &amp; Clean</h2>
+
+<div class="row">
+
+  <!-- ══ HERO SIZE ══ -->
+  <div class="card">
+    <div class="lbl"><em>Hero</em> — full viewport</div>
+
+    <svg viewBox="0 0 200 260" width="200" height="260" xmlns="http://www.w3.org/2000/svg"
+         style="filter:drop-shadow(0 0 28px rgba(232,80,2,0.3))">
+
+      <!-- ░░ HAIR — clean stylized curls ░░ -->
+
+      <!-- Main hair blob (dark, soft shape) -->
+      <path d="
+        M60,110
+        Q30,105 26,80
+        Q22,55 34,36
+        Q48,16 70,10
+        Q100,2 126,14
+        Q150,26 158,50
+        Q166,72 158,96
+        Q154,110 140,114
+        Q148,98 148,82
+        Q148,54 130,40
+        Q112,28 100,30
+        Q80,32 68,48
+        Q56,64 58,88
+        Q58,100 60,110 Z
+      " fill="#1c1008"/>
+
+      <!-- Left hair volume — puffed out curls -->
+      <path d="
+        M42,82
+        Q22,88 18,110
+        Q16,128 24,148
+        Q32,166 44,172
+        Q40,152 40,134
+        Q40,112 46,96
+        Q48,88 50,82 Z
+      " fill="#231408"/>
+
+      <!-- Right hair volume -->
+      <path d="
+        M158,82
+        Q178,88 182,110
+        Q184,128 176,148
+        Q168,166 156,172
+        Q160,152 160,134
+        Q160,112 154,96
+        Q152,88 150,82 Z
+      " fill="#231408"/>
+
+      <!-- Left shoulder-length curls draping down -->
+      <path d="
+        M36,130
+        Q20,138 18,158
+        Q18,172 26,182
+        Q34,174 38,162
+        Q40,148 40,134 Z
+      " fill="#1c1008"/>
+      <path d="
+        M164,130
+        Q180,138 182,158
+        Q182,172 174,182
+        Q166,174 162,162
+        Q160,148 160,134 Z
+      " fill="#1c1008"/>
+
+      <!-- Top curl highlights (lighter poly planes) -->
+      <path d="M70,12 Q100,4 130,16 Q114,24 100,26 Q86,26 70,12 Z" fill="#2e1e10" opacity="0.8"/>
+      <!-- Left top curl -->
+      <path d="M42,36 Q30,52 28,70 Q36,60 44,50 Q52,40 58,32 Z" fill="#281a0c"/>
+      <!-- Right top curl -->
+      <path d="M158,36 Q170,52 172,70 Q164,60 156,50 Q148,40 142,32 Z" fill="#281a0c"/>
+
+      <!-- ░░ NECK & SHOULDERS ░░ -->
+      <rect x="86" y="206" width="28" height="24" rx="2" fill="#c8885c"/>
+      <!-- Collar / top of outfit -->
+      <path d="M50,226 L86,208 L100,218 L114,208 L150,226 L140,234 L100,222 L60,234 Z" fill="#2a2030"/>
+      <!-- Outfit body hint -->
+      <path d="M50,226 L60,234 L60,260 L140,260 L140,234 L150,226 L140,234 L100,222 L60,234 Z" fill="#221828"/>
+
+      <!-- ░░ FACE — round, cute, warm ░░ -->
+      <!-- Base face shape — rounder/softer -->
+      <ellipse cx="100" cy="130" rx="52" ry="58" fill="#d9905e"/>
+
+      <!-- Low-poly face planes (subtle, keep it clean) -->
+      <!-- Left cheek -->
+      <path d="M48,120 Q50,100 58,88 Q54,108 52,128 Q50,144 54,158 Z" fill="#c8784a" opacity="0.5"/>
+      <!-- Right cheek -->
+      <path d="M152,120 Q150,100 142,88 Q146,108 148,128 Q150,144 146,158 Z" fill="#c8784a" opacity="0.5"/>
+      <!-- Forehead highlight -->
+      <ellipse cx="100" cy="92" rx="30" ry="14" fill="#e8a872" opacity="0.35"/>
+      <!-- Chin shadow -->
+      <path d="M72,175 Q100,188 128,175 Q114,184 100,186 Q86,184 72,175 Z" fill="#b8684a" opacity="0.5"/>
+
+      <!-- Blush on cheeks (cute!) -->
+      <ellipse cx="66" cy="148" rx="12" ry="7" fill="#e87070" opacity="0.25"/>
+      <ellipse cx="134" cy="148" rx="12" ry="7" fill="#e87070" opacity="0.25"/>
+
+      <!-- ░░ EYEBROWS — thick, expressive ░░ -->
+      <path d="M66,104 Q78,98 90,102" stroke="#3a200e" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M110,102 Q122,98 134,104" stroke="#3a200e" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+
+      <!-- ░░ GLASSES — round, cute thin frames ░░ -->
+      <!-- Lens shadows (subtle depth) -->
+      <circle cx="80" cy="122" r="20" fill="rgba(0,0,0,0.08)"/>
+      <circle cx="120" cy="122" r="20" fill="rgba(0,0,0,0.08)"/>
+      <!-- Left lens -->
+      <circle cx="80" cy="122" r="19" fill="rgba(200,230,255,0.04)" stroke="#c8baa8" stroke-width="2.5"/>
+      <!-- Right lens -->
+      <circle cx="120" cy="122" r="19" fill="rgba(200,230,255,0.04)" stroke="#c8baa8" stroke-width="2.5"/>
+      <!-- Bridge (cute small bridge) -->
+      <path d="M99,122 Q100,118 101,122" stroke="#c8baa8" stroke-width="2" fill="none"/>
+      <!-- Temples -->
+      <line x1="61" y1="120" x2="50" y2="117" stroke="#c8baa8" stroke-width="2" stroke-linecap="round"/>
+      <line x1="139" y1="120" x2="150" y2="117" stroke="#c8baa8" stroke-width="2" stroke-linecap="round"/>
+      <!-- Lens glint (cute sparkle) -->
+      <circle cx="72" cy="116" r="2.5" fill="white" opacity="0.4"/>
+      <circle cx="112" cy="116" r="2.5" fill="white" opacity="0.4"/>
+      <!-- Small second glint -->
+      <circle cx="76" cy="113" r="1.2" fill="white" opacity="0.25"/>
+
+      <!-- ░░ EYES — big, cute, expressive ░░ -->
+      <!-- Eye whites -->
+      <ellipse cx="80" cy="122" rx="11" ry="10" fill="white" opacity="0.95"/>
+      <ellipse cx="120" cy="122" rx="11" ry="10" fill="white" opacity="0.95"/>
+      <!-- Iris (dark brown, large) -->
+      <circle cx="80" cy="123" r="8" fill="#2a1206"/>
+      <circle cx="120" cy="123" r="8" fill="#2a1206"/>
+      <!-- ★ Orange glowing iris — brand mark ★ -->
+      <circle cx="80" cy="123" r="6" fill="#E85002" opacity="0.85"/>
+      <circle cx="120" cy="123" r="6" fill="#E85002" opacity="0.85"/>
+      <!-- Pupil -->
+      <circle cx="80" cy="123" r="3.5" fill="#080200"/>
+      <circle cx="120" cy="123" r="3.5" fill="#080200"/>
+      <!-- Main shine dot -->
+      <circle cx="82" cy="120" r="2.2" fill="white" opacity="0.95"/>
+      <circle cx="122" cy="120" r="2.2" fill="white" opacity="0.95"/>
+      <!-- Second small shine -->
+      <circle cx="77" cy="125" r="1" fill="white" opacity="0.5"/>
+      <circle cx="117" cy="125" r="1" fill="white" opacity="0.5"/>
+
+      <!-- Eyelashes (top) — simple arcs -->
+      <path d="M69,115 Q72,110 76,114" stroke="#1a0a02" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M109,115 Q112,110 116,114" stroke="#1a0a02" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+      <!-- Lower lash line -->
+      <path d="M70,128 Q80,132 90,128" stroke="#c8785a" stroke-width="1" fill="none" opacity="0.4"/>
+      <path d="M110,128 Q120,132 130,128" stroke="#c8785a" stroke-width="1" fill="none" opacity="0.4"/>
+
+      <!-- ░░ NOSE — cute, minimal ░░ -->
+      <path d="M96,145 Q100,140 104,145 Q102,150 100,151 Q98,150 96,145 Z" fill="#b8684a" opacity="0.6"/>
+
+      <!-- ░░ MOUTH — big cute smile ░░ -->
+      <!-- Smile line -->
+      <path d="M76,162 Q88,174 100,174 Q112,174 124,162" stroke="#9a4828" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Upper lip -->
+      <path d="M80,162 Q92,158 100,160 Q108,158 120,162 Q112,168 100,168 Q88,168 80,162 Z" fill="#b05838" opacity="0.9"/>
+      <!-- Lower lip (fuller) -->
+      <path d="M80,162 Q88,172 100,173 Q112,172 120,162 Q112,170 100,172 Q88,170 80,162 Z" fill="#c06848" opacity="0.8"/>
+      <!-- Teeth — bright smile -->
+      <path d="M83,163 Q100,170 117,163 Q110,170 100,172 Q90,170 83,163 Z" fill="white" opacity="0.9"/>
+      <!-- Smile dimples -->
+      <circle cx="74" cy="162" r="2.5" fill="#b8684a" opacity="0.4"/>
+      <circle cx="126" cy="162" r="2.5" fill="#b8684a" opacity="0.4"/>
+
+      <!-- ░░ HAIR FRONT OVERLAY ░░ -->
+      <!-- Left hair over face edge -->
+      <path d="M48,100 Q38,112 38,130 Q40,118 44,108 Q48,98 54,92 Z" fill="#1c1008"/>
+      <!-- Right hair over face edge -->
+      <path d="M152,100 Q162,112 162,130 Q160,118 156,108 Q152,98 146,92 Z" fill="#1c1008"/>
+      <!-- Few stray curls at forehead (cute!) -->
+      <path d="M82,38 Q78,30 72,38 Q76,42 80,44 Q78,40 82,38 Z" fill="#281a0c"/>
+      <path d="M100,30 Q98,22 96,30 Q98,34 100,36 Q100,32 100,30 Z" fill="#281a0c"/>
+      <path d="M118,38 Q122,30 128,38 Q124,42 120,44 Q122,40 118,38 Z" fill="#281a0c"/>
+
+      <!-- ░░ ORANGE HAIR ACCENT LINE ░░ -->
+      <path d="M62,18 Q100,4 138,18 Q124,28 100,30 Q76,28 62,18 Z" fill="none"/>
+      <path d="M46,38 Q30,60 28,88" stroke="#E85002" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.35"/>
+      <path d="M154,38 Q170,60 172,88" stroke="#E85002" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.35"/>
+
+      <!-- ░░ OUTER GLOW RING ░░ -->
+      <ellipse cx="100" cy="130" rx="78" ry="88" fill="none" stroke="#E85002" stroke-width="0.8" opacity="0.12"/>
+
+    </svg>
+
+    <div class="lbl">Curly hair · Round glasses · Big smile · <em>Orange eyes</em></div>
+  </div>
+
+  <!-- ══ SITE PREVIEW ══ -->
+  <div class="card" style="background:#080808;border-color:rgba(232,80,2,0.15);min-width:240px">
+    <div class="lbl"><em>Site preview</em> — hero context</div>
+
+    <div style="position:relative;width:220px;height:280px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#050505;border:1px solid rgba(255,255,255,0.05)">
+      <!-- bg grid -->
+      <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:22px 22px"></div>
+      <!-- reticles -->
+      <div style="position:absolute;width:200px;height:200px;border-radius:50%;border:1px solid rgba(232,80,2,0.12);top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+      <div style="position:absolute;width:240px;height:240px;border-radius:50%;border:1px solid rgba(232,80,2,0.07);top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+      <!-- particles -->
+      <div style="position:absolute;width:3px;height:3px;background:#E85002;border-radius:50%;box-shadow:0 0 8px #E85002;top:14%;left:16%;opacity:.6"></div>
+      <div style="position:absolute;width:2px;height:2px;background:#E85002;border-radius:50%;box-shadow:0 0 6px #E85002;bottom:18%;right:14%;opacity:.4"></div>
+      <div style="position:absolute;width:2px;height:2px;background:#E85002;border-radius:50%;box-shadow:0 0 5px #E85002;top:22%;right:18%;opacity:.3"></div>
+
+      <!-- Avatar (scaled down) -->
+      <svg viewBox="0 0 200 260" width="150" height="195" xmlns="http://www.w3.org/2000/svg"
+           style="position:relative;z-index:2;filter:drop-shadow(0 0 18px rgba(232,80,2,0.45));margin-bottom:20px">
+        <path d="M60,110 Q30,105 26,80 Q22,55 34,36 Q48,16 70,10 Q100,2 126,14 Q150,26 158,50 Q166,72 158,96 Q154,110 140,114 Q148,98 148,82 Q148,54 130,40 Q112,28 100,30 Q80,32 68,48 Q56,64 58,88 Q58,100 60,110 Z" fill="#1c1008"/>
+        <path d="M42,82 Q22,88 18,110 Q16,128 24,148 Q32,166 44,172 Q40,152 40,134 Q40,112 46,96 Z" fill="#231408"/>
+        <path d="M158,82 Q178,88 182,110 Q184,128 176,148 Q168,166 156,172 Q160,152 160,134 Q160,112 154,96 Z" fill="#231408"/>
+        <path d="M36,130 Q20,138 18,158 Q18,172 26,182 Q34,174 38,162 Q40,148 40,134 Z" fill="#1c1008"/>
+        <path d="M164,130 Q180,138 182,158 Q182,172 174,182 Q166,174 162,162 Q160,148 160,134 Z" fill="#1c1008"/>
+        <path d="M70,12 Q100,4 130,16 Q114,24 100,26 Q86,26 70,12 Z" fill="#2e1e10" opacity="0.8"/>
+        <rect x="86" y="206" width="28" height="24" rx="2" fill="#c8885c"/>
+        <path d="M50,226 L86,208 L100,218 L114,208 L150,226 L140,234 L100,222 L60,234 Z" fill="#2a2030"/>
+        <path d="M50,226 L60,234 L60,260 L140,260 L140,234 L150,226 L140,234 L100,222 L60,234 Z" fill="#221828"/>
+        <ellipse cx="100" cy="130" rx="52" ry="58" fill="#d9905e"/>
+        <path d="M48,120 Q50,100 58,88 Q54,108 52,128 Q50,144 54,158 Z" fill="#c8784a" opacity="0.5"/>
+        <path d="M152,120 Q150,100 142,88 Q146,108 148,128 Q150,144 146,158 Z" fill="#c8784a" opacity="0.5"/>
+        <ellipse cx="100" cy="92" rx="30" ry="14" fill="#e8a872" opacity="0.35"/>
+        <ellipse cx="66" cy="148" rx="12" ry="7" fill="#e87070" opacity="0.22"/>
+        <ellipse cx="134" cy="148" rx="12" ry="7" fill="#e87070" opacity="0.22"/>
+        <path d="M66,104 Q78,98 90,102" stroke="#3a200e" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M110,102 Q122,98 134,104" stroke="#3a200e" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <circle cx="80" cy="122" r="19" fill="rgba(200,230,255,0.04)" stroke="#c8baa8" stroke-width="2.5"/>
+        <circle cx="120" cy="122" r="19" fill="rgba(200,230,255,0.04)" stroke="#c8baa8" stroke-width="2.5"/>
+        <path d="M99,122 Q100,118 101,122" stroke="#c8baa8" stroke-width="2" fill="none"/>
+        <line x1="61" y1="120" x2="50" y2="117" stroke="#c8baa8" stroke-width="2" stroke-linecap="round"/>
+        <line x1="139" y1="120" x2="150" y2="117" stroke="#c8baa8" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="72" cy="116" r="2.5" fill="white" opacity="0.4"/>
+        <ellipse cx="80" cy="122" rx="11" ry="10" fill="white" opacity="0.95"/>
+        <ellipse cx="120" cy="122" rx="11" ry="10" fill="white" opacity="0.95"/>
+        <circle cx="80" cy="123" r="8" fill="#2a1206"/>
+        <circle cx="120" cy="123" r="8" fill="#2a1206"/>
+        <circle cx="80" cy="123" r="6" fill="#E85002" opacity="0.85"/>
+        <circle cx="120" cy="123" r="6" fill="#E85002" opacity="0.85"/>
+        <circle cx="80" cy="123" r="3.5" fill="#080200"/>
+        <circle cx="120" cy="123" r="3.5" fill="#080200"/>
+        <circle cx="82" cy="120" r="2.2" fill="white" opacity="0.95"/>
+        <circle cx="122" cy="120" r="2.2" fill="white" opacity="0.95"/>
+        <path d="M96,145 Q100,140 104,145 Q102,150 100,151 Q98,150 96,145 Z" fill="#b8684a" opacity="0.6"/>
+        <path d="M80,162 Q92,158 100,160 Q108,158 120,162 Q112,168 100,168 Q88,168 80,162 Z" fill="#b05838" opacity="0.9"/>
+        <path d="M83,163 Q100,170 117,163 Q110,170 100,172 Q90,170 83,163 Z" fill="white" opacity="0.9"/>
+        <circle cx="74" cy="162" r="2.5" fill="#b8684a" opacity="0.35"/>
+        <circle cx="126" cy="162" r="2.5" fill="#b8684a" opacity="0.35"/>
+        <path d="M48,100 Q38,112 38,130 Q40,118 44,108 Z" fill="#1c1008"/>
+        <path d="M152,100 Q162,112 162,130 Q160,118 156,108 Z" fill="#1c1008"/>
+        <path d="M82,38 Q78,30 72,38 Q76,42 80,44 Z" fill="#281a0c"/>
+        <path d="M118,38 Q122,30 128,38 Q124,42 120,44 Z" fill="#281a0c"/>
+        <path d="M46,38 Q30,60 28,88" stroke="#E85002" stroke-width="1.5" fill="none" opacity="0.3"/>
+        <path d="M154,38 Q170,60 172,88" stroke="#E85002" stroke-width="1.5" fill="none" opacity="0.3"/>
+      </svg>
+
+      <!-- Name below -->
+      <div style="position:absolute;bottom:16px;left:0;right:0;text-align:center">
+        <div style="font-family:'Arial Black',sans-serif;font-size:13px;font-weight:900;letter-spacing:-0.5px;color:white;text-transform:uppercase">UMYAL <span style="color:#E85002">DIXIT</span></div>
+        <div style="font-size:7px;letter-spacing:3px;color:rgba(255,255,255,0.35);text-transform:uppercase;margin-top:3px">// Creative Engineer</div>
+      </div>
+    </div>
+
+    <div class="lbl">Eyes track cursor in real-time</div>
+  </div>
+
+</div>
+
+<p style="font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.25);text-transform:uppercase;text-align:center">Does this feel better? Or any feature to tweak?</p>
+
+<script src="http://localhost:62000/helper.js"></script>
+</body>
+</html>

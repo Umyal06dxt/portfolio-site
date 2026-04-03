@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Avatar Redesign</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#050505; color:white; font-family:'Courier New',monospace; display:flex; flex-direction:column; align-items:center; padding:40px 20px; gap:48px; }
+  h2 { font-size:10px; letter-spacing:4px; text-transform:uppercase; color:#E85002; text-align:center; }
+  .row { display:flex; gap:40px; align-items:flex-start; justify-content:center; flex-wrap:wrap; }
+  .avatar-card {
+    display:flex; flex-direction:column; align-items:center; gap:12px;
+    background:#080808; border:1px solid rgba(255,255,255,0.08);
+    padding:28px 24px;
+  }
+  .avatar-label { font-size:8px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,0.35); }
+  .avatar-label span { color:#E85002; }
+</style>
+</head>
+<body>
+
+<h2>// Avatar Redesign — Based on your photo</h2>
+<p style="font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);text-transform:uppercase;margin-top:-32px">Curly hair · Round glasses · Oval face · Warm smile</p>
+
+<div class="row">
+
+  <!-- HERO SIZE -->
+  <div class="avatar-card">
+    <div class="avatar-label"><span>Hero</span> — Full viewport</div>
+    <svg viewBox="0 0 160 220" width="160" height="220" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 24px rgba(232,80,2,0.35))">
+
+      <!-- ── HAIR BACK LAYER (behind face) ── -->
+      <!-- Wide curly mass bottom-left -->
+      <path d="M30,80 Q10,100 14,140 Q18,165 30,175 Q38,155 36,130 Q34,105 42,88 Z" fill="#1a1008"/>
+      <!-- Wide curly mass bottom-right -->
+      <path d="M130,80 Q150,100 146,140 Q142,165 130,175 Q122,155 124,130 Q126,105 118,88 Z" fill="#1a1008"/>
+
+      <!-- ── HAIR TOP — voluminous curly mass ── -->
+      <!-- Main top blob -->
+      <path d="M50,62 Q44,30 62,14 Q80,2 100,10 Q118,16 126,36 Q134,52 128,66 Q118,52 110,46 Q92,36 80,38 Q64,40 56,52 Z" fill="#221510"/>
+      <!-- Left curl cluster -->
+      <path d="M44,58 Q28,44 34,28 Q40,14 56,12 Q50,28 48,44 Z" fill="#1e1208"/>
+      <!-- Right curl cluster -->
+      <path d="M116,58 Q132,44 126,28 Q120,14 104,12 Q110,28 112,44 Z" fill="#1e1208"/>
+      <!-- Top center volume bump -->
+      <path d="M62,18 Q80,4 100,10 Q88,20 80,22 Q72,22 62,18 Z" fill="#2a1a0c"/>
+      <!-- Left side volume -->
+      <path d="M36,70 Q24,56 30,40 Q38,26 52,20 Q44,38 40,56 Z" fill="#1a1008"/>
+      <!-- Right side volume -->
+      <path d="M124,70 Q136,56 130,40 Q122,26 108,20 Q116,38 120,56 Z" fill="#1a1008"/>
+      <!-- Curly wisps left -->
+      <path d="M28,88 Q18,78 22,64 Q30,54 40,58 Q32,66 30,76 Z" fill="#150e06"/>
+      <!-- Curly wisps right -->
+      <path d="M132,88 Q142,78 138,64 Q130,54 120,58 Q128,66 130,76 Z" fill="#150e06"/>
+
+      <!-- ── NECK ── -->
+      <rect x="68" y="178" width="24" height="22" fill="#c8814a"/>
+      <!-- Collar hint -->
+      <path d="M52,196 L68,180 L80,188 L92,180 L108,196 L100,200 L80,192 L60,200 Z" fill="#2a1a0e"/>
+
+      <!-- ── FACE ── -->
+      <!-- Main face polygon — oval, warm South Asian tone -->
+      <path d="M52,68 Q40,78 38,100 Q36,122 40,142 Q46,162 60,172 Q70,178 80,178 Q90,178 100,172 Q114,162 120,142 Q124,122 122,100 Q120,78 108,68 Q96,58 80,58 Q64,58 52,68 Z" fill="#d4885a"/>
+
+      <!-- Face shading facets (low-poly planes) -->
+      <!-- Left cheek shadow -->
+      <path d="M40,100 Q38,122 42,142 Q50,134 52,116 Q52,100 48,88 Z" fill="#be7245" opacity="0.7"/>
+      <!-- Right cheek shadow -->
+      <path d="M120,100 Q122,122 118,142 Q110,134 108,116 Q108,100 112,88 Z" fill="#be7245" opacity="0.7"/>
+      <!-- Forehead highlight -->
+      <path d="M56,68 Q80,58 104,68 Q92,74 80,76 Q68,74 56,68 Z" fill="#e8a070" opacity="0.5"/>
+      <!-- Chin facet -->
+      <path d="M60,168 Q80,178 100,168 Q92,162 80,162 Q68,162 60,168 Z" fill="#be7245" opacity="0.6"/>
+      <!-- Nose bridge/tip -->
+      <path d="M76,108 Q80,104 84,108 Q82,116 80,118 Q78,116 76,108 Z" fill="#be7245" opacity="0.8"/>
+
+      <!-- ── GLASSES ── -->
+      <!-- Left lens (round) -->
+      <circle cx="64" cy="100" r="15" fill="none" stroke="#d4c8b8" stroke-width="2.2"/>
+      <circle cx="64" cy="100" r="14" fill="rgba(180,210,240,0.08)"/>
+      <!-- Right lens (round) -->
+      <circle cx="96" cy="100" r="15" fill="none" stroke="#d4c8b8" stroke-width="2.2"/>
+      <circle cx="96" cy="100" r="14" fill="rgba(180,210,240,0.08)"/>
+      <!-- Bridge -->
+      <path d="M79,100 L81,100" stroke="#d4c8b8" stroke-width="2" fill="none"/>
+      <path d="M79,100 Q80,97 81,100" stroke="#d4c8b8" stroke-width="1.8" fill="none"/>
+      <!-- Left arm (temple) -->
+      <line x1="49" y1="98" x2="40" y2="96" stroke="#d4c8b8" stroke-width="1.8"/>
+      <!-- Right arm (temple) -->
+      <line x1="111" y1="98" x2="120" y2="96" stroke="#d4c8b8" stroke-width="1.8"/>
+      <!-- Lens glint -->
+      <circle cx="59" cy="95" r="2" fill="white" opacity="0.3"/>
+      <circle cx="91" cy="95" r="2" fill="white" opacity="0.3"/>
+
+      <!-- ── EYES (behind glasses) ── -->
+      <!-- Left eye -->
+      <ellipse cx="64" cy="100" rx="6" ry="5" fill="#1a0e06"/>
+      <ellipse cx="64" cy="100" rx="4" ry="4" fill="#2d1a0a"/>
+      <circle cx="64" cy="100" r="2.5" fill="#0a0502"/>
+      <circle cx="65.5" cy="98.5" r="1" fill="white" opacity="0.7"/>
+      <!-- Right eye -->
+      <ellipse cx="96" cy="100" rx="6" ry="5" fill="#1a0e06"/>
+      <ellipse cx="96" cy="100" rx="4" ry="4" fill="#2d1a0a"/>
+      <circle cx="96" cy="100" r="2.5" fill="#0a0502"/>
+      <circle cx="97.5" cy="98.5" r="1" fill="white" opacity="0.7"/>
+
+      <!-- ── EYEBROWS ── -->
+      <path d="M52,88 Q64,82 76,86" stroke="#3d2010" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M84,86 Q96,82 108,88" stroke="#3d2010" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+      <!-- ── SMILE ── -->
+      <!-- Upper lip -->
+      <path d="M68,142 Q76,138 80,140 Q84,138 92,142 Q86,146 80,145 Q74,146 68,142 Z" fill="#a85030" opacity="0.9"/>
+      <!-- Lower lip -->
+      <path d="M68,142 Q74,150 80,151 Q86,150 92,142 Q86,148 80,148 Q74,148 68,142 Z" fill="#c46040" opacity="0.8"/>
+      <!-- Smile dimple lines -->
+      <path d="M66,140 Q63,145 65,150" stroke="#be7245" stroke-width="1" fill="none" opacity="0.5"/>
+      <path d="M94,140 Q97,145 95,150" stroke="#be7245" stroke-width="1" fill="none" opacity="0.5"/>
+      <!-- Teeth hint -->
+      <path d="M70,143 Q80,146 90,143 Q86,148 80,148 Q74,148 70,143 Z" fill="rgba(255,255,255,0.7)"/>
+
+      <!-- ── HAIR FRONT OVERLAY (on top of face edges) ── -->
+      <!-- Left side hair draping over face edge -->
+      <path d="M38,90 Q30,110 28,140 Q30,160 38,174 Q40,155 40,130 Q40,108 46,90 Z" fill="#1e1208"/>
+      <!-- Right side hair -->
+      <path d="M122,90 Q130,110 132,140 Q130,160 122,174 Q120,155 120,130 Q120,108 114,90 Z" fill="#1e1208"/>
+      <!-- Left forehead hair coming down -->
+      <path d="M44,68 Q36,78 36,96 Q40,90 44,82 Q50,72 52,68 Z" fill="#221510"/>
+      <!-- Right forehead hair -->
+      <path d="M116,68 Q124,78 124,96 Q120,90 116,82 Q110,72 108,68 Z" fill="#221510"/>
+
+      <!-- ── ORANGE ACCENT GLOW (brand) ── -->
+      <!-- Subtle orange rim on top of hair -->
+      <path d="M50,62 Q44,30 62,14 Q80,2 100,10 Q118,16 126,36 Q134,52 128,66" fill="none" stroke="#E85002" stroke-width="1.5" opacity="0.4"/>
+
+      <!-- ── ORANGE EYES OVERLAY (for the "avatar" feel) ── -->
+      <!-- Orange iris glow on top of glasses -->
+      <circle cx="64" cy="100" r="3" fill="#E85002" opacity="0.7"/>
+      <circle cx="96" cy="100" r="3" fill="#E85002" opacity="0.7"/>
+      <circle cx="64" cy="100" r="1.5" fill="#0a0000"/>
+      <circle cx="96" cy="100" r="1.5" fill="#0a0000"/>
+      <circle cx="65" cy="99" r="0.8" fill="white" opacity="0.9"/>
+      <circle cx="97" cy="99" r="0.8" fill="white" opacity="0.9"/>
+
+    </svg>
+    <div class="avatar-label">Eyes track cursor · Head rotates on hover</div>
+  </div>
+
+  <!-- CARD SIZE (bento) -->
+  <div class="avatar-card">
+    <div class="avatar-label"><span>Card</span> — Bento center</div>
+    <svg viewBox="0 0 100 138" width="100" height="138" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 14px rgba(232,80,2,0.4))">
+
+      <!-- Hair back -->
+      <path d="M18,50 Q8,63 10,88 Q14,104 22,110 Q26,96 24,80 Q22,64 28,54 Z" fill="#1a1008"/>
+      <path d="M82,50 Q92,63 90,88 Q86,104 78,110 Q74,96 76,80 Q78,64 72,54 Z" fill="#1a1008"/>
+
+      <!-- Hair top -->
+      <path d="M30,40 Q28,20 38,10 Q50,2 62,4 Q74,6 80,18 Q84,30 80,42 Q74,32 68,28 Q56,22 50,24 Q40,26 34,34 Z" fill="#221510"/>
+      <path d="M26,44 Q16,34 20,18 Q26,8 36,8 Q30,20 28,32 Z" fill="#1a1008"/>
+      <path d="M74,44 Q84,34 80,18 Q74,8 64,8 Q70,20 72,32 Z" fill="#1a1008"/>
+
+      <!-- Neck -->
+      <rect x="43" y="112" width="14" height="14" fill="#c8814a"/>
+      <path d="M33,123 L43,113 L50,118 L57,113 L67,123 L62,126 L50,120 L38,126 Z" fill="#2a1a0e"/>
+
+      <!-- Face -->
+      <path d="M32,44 Q24,50 22,64 Q20,78 22,92 Q26,106 34,112 Q42,116 50,116 Q58,116 66,112 Q74,106 78,92 Q80,78 78,64 Q76,50 68,44 Q60,38 50,38 Q40,38 32,44 Z" fill="#d4885a"/>
+
+      <!-- Face shading -->
+      <path d="M24,64 Q22,80 24,94 Q28,88 30,76 Q30,64 28,56 Z" fill="#be7245" opacity="0.6"/>
+      <path d="M76,64 Q78,80 76,94 Q72,88 70,76 Q70,64 72,56 Z" fill="#be7245" opacity="0.6"/>
+      <path d="M34,44 Q50,38 66,44 Q58,48 50,50 Q42,48 34,44 Z" fill="#e8a070" opacity="0.4"/>
+
+      <!-- Nose -->
+      <path d="M47,68 Q50,65 53,68 Q52,72 50,74 Q48,72 47,68 Z" fill="#be7245" opacity="0.7"/>
+
+      <!-- Glasses -->
+      <circle cx="40" cy="62" r="10" fill="none" stroke="#d4c8b8" stroke-width="1.6"/>
+      <circle cx="60" cy="62" r="10" fill="none" stroke="#d4c8b8" stroke-width="1.6"/>
+      <circle cx="40" cy="62" r="9" fill="rgba(180,210,240,0.07)"/>
+      <circle cx="60" cy="62" r="9" fill="rgba(180,210,240,0.07)"/>
+      <path d="M50,62 Q50,59 50,62" stroke="#d4c8b8" stroke-width="1.5" fill="none"/>
+      <line x1="30" y1="61" x2="24" y2="59" stroke="#d4c8b8" stroke-width="1.4"/>
+      <line x1="70" y1="61" x2="76" y2="59" stroke="#d4c8b8" stroke-width="1.4"/>
+      <!-- Glint -->
+      <circle cx="37" cy="59" r="1.2" fill="white" opacity="0.35"/>
+      <circle cx="57" cy="59" r="1.2" fill="white" opacity="0.35"/>
+
+      <!-- Eyes -->
+      <circle cx="40" cy="62" r="4" fill="#1a0e06"/>
+      <circle cx="60" cy="62" r="4" fill="#1a0e06"/>
+
+      <!-- Eyebrows -->
+      <path d="M32,54 Q40,50 48,53" stroke="#3d2010" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M52,53 Q60,50 68,54" stroke="#3d2010" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+
+      <!-- Smile -->
+      <path d="M42,90 Q50,97 58,90 Q54,94 50,95 Q46,94 42,90 Z" fill="rgba(255,255,255,0.75)"/>
+      <path d="M40,88 Q50,96 60,88" stroke="#a85030" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+      <!-- Hair front -->
+      <path d="M24,56 Q18,70 18,88 Q20,100 26,108 Q24,90 24,72 Q24,62 28,56 Z" fill="#1e1208"/>
+      <path d="M76,56 Q82,70 82,88 Q80,100 74,108 Q76,90 76,72 Q76,62 72,56 Z" fill="#1e1208"/>
+      <path d="M28,44 Q22,52 22,64 Q26,58 28,52 Q32,46 34,44 Z" fill="#221510"/>
+      <path d="M72,44 Q78,52 78,64 Q74,58 72,52 Q68,46 66,44 Z" fill="#221510"/>
+
+      <!-- Orange accent hair rim -->
+      <path d="M30,40 Q28,20 38,10 Q50,2 62,4 Q74,6 80,18 Q84,30 80,42" fill="none" stroke="#E85002" stroke-width="1.2" opacity="0.4"/>
+
+      <!-- Orange glowing eyes (avatar brand mark) -->
+      <circle cx="40" cy="62" r="3" fill="#E85002" opacity="0.75"/>
+      <circle cx="60" cy="62" r="3" fill="#E85002" opacity="0.75"/>
+      <circle cx="40" cy="62" r="1.5" fill="#050505"/>
+      <circle cx="60" cy="62" r="1.5" fill="#050505"/>
+      <circle cx="40.8" cy="61.2" r="0.7" fill="white" opacity="0.9"/>
+      <circle cx="60.8" cy="61.2" r="0.7" fill="white" opacity="0.9"/>
+
+    </svg>
+    <div class="avatar-label">Idle bob animation · subtle look-around</div>
+  </div>
+
+  <!-- DARK BACKGROUND PREVIEW -->
+  <div class="avatar-card" style="background:#080808;border-color:rgba(232,80,2,0.2);min-width:200px;align-items:center;justify-content:center;">
+    <div class="avatar-label" style="margin-bottom:16px"><span>Hero preview</span> — on site bg</div>
+    <!-- reticle -->
+    <div style="position:relative;width:180px;height:230px;display:flex;align-items:center;justify-content:center;">
+      <div style="position:absolute;width:190px;height:190px;border-radius:50%;border:1px solid rgba(232,80,2,0.15);top:20px;left:-5px"></div>
+      <div style="position:absolute;width:220px;height:220px;border-radius:50%;border:1px solid rgba(232,80,2,0.08);top:5px;left:-20px"></div>
+      <!-- grid bg -->
+      <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:20px 20px;border-radius:4px"></div>
+      <svg viewBox="0 0 160 220" width="130" height="179" xmlns="http://www.w3.org/2000/svg" style="position:relative;z-index:1;filter:drop-shadow(0 0 20px rgba(232,80,2,0.4))">
+        <path d="M30,80 Q10,100 14,140 Q18,165 30,175 Q38,155 36,130 Q34,105 42,88 Z" fill="#1a1008"/>
+        <path d="M130,80 Q150,100 146,140 Q142,165 130,175 Q122,155 124,130 Q126,105 118,88 Z" fill="#1a1008"/>
+        <path d="M50,62 Q44,30 62,14 Q80,2 100,10 Q118,16 126,36 Q134,52 128,66 Q118,52 110,46 Q92,36 80,38 Q64,40 56,52 Z" fill="#221510"/>
+        <path d="M44,58 Q28,44 34,28 Q40,14 56,12 Q50,28 48,44 Z" fill="#1e1208"/>
+        <path d="M116,58 Q132,44 126,28 Q120,14 104,12 Q110,28 112,44 Z" fill="#1e1208"/>
+        <path d="M36,70 Q24,56 30,40 Q38,26 52,20 Q44,38 40,56 Z" fill="#1a1008"/>
+        <path d="M124,70 Q136,56 130,40 Q122,26 108,20 Q116,38 120,56 Z" fill="#1a1008"/>
+        <path d="M28,88 Q18,78 22,64 Q30,54 40,58 Q32,66 30,76 Z" fill="#150e06"/>
+        <path d="M132,88 Q142,78 138,64 Q130,54 120,58 Q128,66 130,76 Z" fill="#150e06"/>
+        <rect x="68" y="178" width="24" height="22" fill="#c8814a"/>
+        <path d="M52,196 L68,180 L80,188 L92,180 L108,196 L100,200 L80,192 L60,200 Z" fill="#2a1a0e"/>
+        <path d="M52,68 Q40,78 38,100 Q36,122 40,142 Q46,162 60,172 Q70,178 80,178 Q90,178 100,172 Q114,162 120,142 Q124,122 122,100 Q120,78 108,68 Q96,58 80,58 Q64,58 52,68 Z" fill="#d4885a"/>
+        <path d="M40,100 Q38,122 42,142 Q50,134 52,116 Q52,100 48,88 Z" fill="#be7245" opacity="0.7"/>
+        <path d="M120,100 Q122,122 118,142 Q110,134 108,116 Q108,100 112,88 Z" fill="#be7245" opacity="0.7"/>
+        <path d="M56,68 Q80,58 104,68 Q92,74 80,76 Q68,74 56,68 Z" fill="#e8a070" opacity="0.5"/>
+        <circle cx="64" cy="100" r="15" fill="none" stroke="#d4c8b8" stroke-width="2.2"/>
+        <circle cx="96" cy="100" r="15" fill="none" stroke="#d4c8b8" stroke-width="2.2"/>
+        <circle cx="64" cy="100" r="14" fill="rgba(180,210,240,0.06)"/>
+        <circle cx="96" cy="100" r="14" fill="rgba(180,210,240,0.06)"/>
+        <path d="M79,100 Q80,97 81,100" stroke="#d4c8b8" stroke-width="1.8" fill="none"/>
+        <line x1="49" y1="98" x2="40" y2="96" stroke="#d4c8b8" stroke-width="1.8"/>
+        <line x1="111" y1="98" x2="120" y2="96" stroke="#d4c8b8" stroke-width="1.8"/>
+        <ellipse cx="64" cy="100" rx="6" ry="5" fill="#1a0e06"/>
+        <ellipse cx="96" cy="100" rx="6" ry="5" fill="#1a0e06"/>
+        <path d="M52,88 Q64,82 76,86" stroke="#3d2010" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M84,86 Q96,82 108,88" stroke="#3d2010" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <path d="M68,142 Q76,138 80,140 Q84,138 92,142 Q86,146 80,145 Q74,146 68,142 Z" fill="#a85030" opacity="0.9"/>
+        <path d="M70,143 Q80,146 90,143 Q86,148 80,148 Q74,148 70,143 Z" fill="rgba(255,255,255,0.7)"/>
+        <path d="M38,90 Q30,110 28,140 Q30,160 38,174 Q40,155 40,130 Q40,108 46,90 Z" fill="#1e1208"/>
+        <path d="M122,90 Q130,110 132,140 Q130,160 122,174 Q120,155 120,130 Q120,108 114,90 Z" fill="#1e1208"/>
+        <path d="M44,68 Q36,78 36,96 Q40,90 44,82 Q50,72 52,68 Z" fill="#221510"/>
+        <path d="M116,68 Q124,78 124,96 Q120,90 116,82 Q110,72 108,68 Z" fill="#221510"/>
+        <path d="M50,62 Q44,30 62,14 Q80,2 100,10 Q118,16 126,36 Q134,52 128,66" fill="none" stroke="#E85002" stroke-width="1.5" opacity="0.45"/>
+        <circle cx="64" cy="100" r="3" fill="#E85002" opacity="0.75"/>
+        <circle cx="96" cy="100" r="3" fill="#E85002" opacity="0.75"/>
+        <circle cx="64" cy="100" r="1.5" fill="#0a0000"/>
+        <circle cx="96" cy="100" r="1.5" fill="#0a0000"/>
+        <circle cx="65" cy="99" r="0.8" fill="white" opacity="0.9"/>
+        <circle cx="97" cy="99" r="0.8" fill="white" opacity="0.9"/>
+      </svg>
+    </div>
+    <div class="avatar-label" style="margin-top:8px">Orange eye glow · hair rim light</div>
+  </div>
+
+</div>
+
+<p style="font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.25);text-transform:uppercase;text-align:center;margin-top:8px">Does this capture your look? Any features to adjust?</p>
+
+<script src="http://localhost:62000/helper.js"></script>
+</body>
+</html>

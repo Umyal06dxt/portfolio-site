@@ -200,9 +200,9 @@ const items: Item[] = [
             </div>
 
             <div className="mt-8 md:mt-0 relative z-10">
-                 <div className="px-6 py-4 border-2 border-[#E85002] text-[#E85002] font-bold text-sm hover:bg-[#E85002] hover:text-black transition-all cursor-pointer uppercase tracking-widest shadow-[4px_4px_0px_#E85002]">
+                 <Link href="/contact" className="px-6 py-4 border-2 border-[#E85002] text-[#E85002] font-bold text-sm hover:bg-[#E85002] hover:text-black transition-all uppercase tracking-widest shadow-[4px_4px_0px_#E85002]">
                     INITIATE_CONTACT
-                 </div>
+                 </Link>
             </div>
         </div>
     ),

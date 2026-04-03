@@ -1,7 +1,7 @@
 "use client";
 
 import Navbar from "@/components/navbar";
-import { PinCard, PinterestHeader } from "@/components/pinterest/layout";
+import { PinCard } from "@/components/pinterest/layout";
 
 // Mock Data - Variety of aspect ratios would be ideal, but we'll re-use images and let them flow naturally.
 const bucket = [
@@ -21,7 +21,6 @@ export default function GalleryPage() {
   return (
     <div className="bg-[#050505] min-h-screen text-white font-sans selection:bg-[#E60023] selection:text-white">
       <Navbar />
-      <PinterestHeader />
 
       <div className="pt-24 px-4 md:px-8 lg:px-16 max-w-[1800px] mx-auto">
          {/* Masonry Grid using CSS Columns */}

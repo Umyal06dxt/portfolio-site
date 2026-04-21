@@ -4,6 +4,7 @@ import { useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useScroll } from '@react-three/drei'
 import { Planet } from './planet'
+import { Ufo } from './ufo'
 import { PLANETS, CAMERA_START_Z, CAMERA_END_Z } from '@/lib/planets'
 import type { Planet as PlanetType } from '@/lib/planets'
 import { easeInOutCubic } from '@/lib/easing'
@@ -73,6 +74,7 @@ export function GalaxyScene({ onPlanetClick }: Props) {
           onClick={() => handlePlanetClick(planet)}
         />
       ))}
+      <Ufo />
     </>
   )
 }

@@ -35,7 +35,7 @@ export function Ufo() {
 
   return (
     // Fixed forward of camera — position z=48 keeps it just inside camera's near clip plane
-    <group ref={groupRef} position={[0, -1.8, 48]}>
+    <group ref={groupRef} position={[0, -1.8, 18]}>
       {/* Disc body */}
       <mesh>
         <cylinderGeometry args={[0.5, 0.5, 0.1, 32]} />

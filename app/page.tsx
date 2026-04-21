@@ -67,11 +67,11 @@ export default function HomePage() {
         </div>
       )}
       <Canvas
-        camera={{ position: [0, 0, 55], fov: 60, near: 0.1, far: 200 }}
+        camera={{ position: [0, 0, 20], fov: 60, near: 0.1, far: 200 }}
         gl={{ antialias: true, alpha: false }}
         style={{ background: '#050505' }}
       >
-        <ScrollControls pages={4} damping={0.25}>
+        <ScrollControls pages={2} damping={0.3}>
           <GalaxyScene onPlanetClick={handlePlanetClick} />
         </ScrollControls>
         <EffectComposer>
@@ -84,13 +84,23 @@ export default function HomePage() {
         </EffectComposer>
       </Canvas>
 
+      {/* Hero intro text — visible on arrival, fades as user scrolls */}
+      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none text-center" style={{ marginTop: '-120px' }}>
+        <h1 className="text-6xl md:text-7xl font-[Syne] font-light text-white/90 mb-3" style={{ letterSpacing: '-0.03em' }}>
+          Umyal Dixit
+        </h1>
+        <p className="text-sm font-[Manrope] tracking-[0.25em] uppercase text-white/50">
+          Creative Engineer · Fluid Interfaces & AI Agents
+        </p>
+        <p className="text-xs font-[Manrope] tracking-widest uppercase text-white/25 mt-2">
+          Scroll to explore
+        </p>
+      </div>
+
       {/* HUD — identity text */}
       <div className="fixed bottom-6 left-8 z-20 pointer-events-none">
-        <p
-          className="text-white/35 text-[11px] font-[Manrope] tracking-wider"
-          style={{ letterSpacing: '0.06em' }}
-        >
-          Umyal Dixit · Creative Engineer · Delhi, IN · Open to Work
+        <p className="text-white/60 text-[12px] font-[Manrope] tracking-wider">
+          Delhi, IN · Open to Work
         </p>
       </div>
 
@@ -100,23 +110,23 @@ export default function HomePage() {
           href="https://linkedin.com/in/umyaldixit"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-white/30 hover:text-white/80 text-[11px] font-[Manrope] tracking-widest uppercase transition-colors duration-300"
+          className="text-white/50 hover:text-white/90 text-[12px] font-[Manrope] tracking-widest uppercase transition-colors duration-300"
         >
-          Li
+          LinkedIn
         </a>
         <a
           href="https://x.com/umyaldixit"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-white/30 hover:text-white/80 text-[11px] font-[Manrope] tracking-widest uppercase transition-colors duration-300"
+          className="text-white/50 hover:text-white/90 text-[12px] font-[Manrope] tracking-widest uppercase transition-colors duration-300"
         >
           X
         </a>
         <a
           href="mailto:hello@umyal.dev"
-          className="text-white/30 hover:text-white/80 text-[11px] font-[Manrope] tracking-widest uppercase transition-colors duration-300"
+          className="text-white/50 hover:text-white/90 text-[12px] font-[Manrope] tracking-widest uppercase transition-colors duration-300"
         >
-          Mail
+          Email
         </a>
       </div>
 

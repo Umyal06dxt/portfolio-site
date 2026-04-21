@@ -30,6 +30,42 @@ export default function HomePage() {
         </ScrollControls>
       </Canvas>
 
+      {/* HUD — identity text */}
+      <div className="fixed bottom-6 left-8 z-20 pointer-events-none">
+        <p
+          className="text-white/35 text-[11px] font-[Manrope] tracking-wider"
+          style={{ letterSpacing: '0.06em' }}
+        >
+          Umyal Dixit · Creative Engineer · Delhi, IN · Open to Work
+        </p>
+      </div>
+
+      {/* HUD — social links */}
+      <div className="fixed bottom-6 right-8 z-20 flex items-center gap-4">
+        <a
+          href="https://linkedin.com/in/umyaldixit"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-white/30 hover:text-white/80 text-[11px] font-[Manrope] tracking-widest uppercase transition-colors duration-300"
+        >
+          Li
+        </a>
+        <a
+          href="https://x.com/umyaldixit"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-white/30 hover:text-white/80 text-[11px] font-[Manrope] tracking-widest uppercase transition-colors duration-300"
+        >
+          X
+        </a>
+        <a
+          href="mailto:hello@umyal.dev"
+          className="text-white/30 hover:text-white/80 text-[11px] font-[Manrope] tracking-widest uppercase transition-colors duration-300"
+        >
+          Mail
+        </a>
+      </div>
+
       {/* Transition overlay — fades in on planet click, bridges to interior page */}
       <div
         className={`fixed inset-0 z-50 transition-opacity duration-700 ${overlay.visible ? 'pointer-events-auto' : 'pointer-events-none'}`}

@@ -13,6 +13,8 @@ type ZoomState = {
   target: PlanetType | null
   progress: number
   startZ: number
+  startX: number
+  startY: number
 }
 
 type Props = {
@@ -27,6 +29,8 @@ export function GalaxyScene({ onPlanetClick }: Props) {
     target: null,
     progress: 0,
     startZ: CAMERA_START_Z,
+    startX: 0,
+    startY: 0,
   })
 
   useFrame((_, delta) => {
@@ -35,8 +39,8 @@ export function GalaxyScene({ onPlanetClick }: Props) {
       const t = easeInOutCubic(zoom.current.progress)
       const targetZ = zoom.current.target.position[2] + 3
       camera.position.z = zoom.current.startZ + (targetZ - zoom.current.startZ) * t
-      camera.position.x += (zoom.current.target.position[0] - camera.position.x) * t * 0.3
-      camera.position.y += (zoom.current.target.position[1] - camera.position.y) * t * 0.3
+      camera.position.x = zoom.current.startX + (zoom.current.target.position[0] - zoom.current.startX) * t
+      camera.position.y = zoom.current.startY + (zoom.current.target.position[1] - zoom.current.startY) * t
     } else {
       // Scroll-driven flight
       const range = CAMERA_START_Z - CAMERA_END_Z
@@ -50,6 +54,8 @@ export function GalaxyScene({ onPlanetClick }: Props) {
       target: planet,
       progress: 0,
       startZ: camera.position.z,
+      startX: camera.position.x,
+      startY: camera.position.y,
     }
     onPlanetClick(planet.slug, planet.bgColor)
   }

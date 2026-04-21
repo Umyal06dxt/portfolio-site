@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Html } from '@react-three/drei'
 import * as THREE from 'three'
@@ -16,12 +16,18 @@ export function Planet({ planet, onClick }: Props) {
   const glowRef = useRef<THREE.Mesh>(null)
   const [hovered, setHovered] = useState(false)
 
-  useFrame((_, delta) => {
+  useEffect(() => {
+    return () => {
+      document.body.style.cursor = 'auto'
+    }
+  }, [])
+
+  useFrame((state, delta) => {
     if (meshRef.current) {
       meshRef.current.rotation.y += delta * 0.08
     }
     if (glowRef.current) {
-      const pulse = 1 + Math.sin(Date.now() * 0.0008) * 0.04
+      const pulse = 1 + Math.sin(state.clock.elapsedTime * 0.8) * 0.04
       glowRef.current.scale.setScalar(pulse)
     }
   })

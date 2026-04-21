@@ -7,9 +7,6 @@ export type Planet = {
   bgColor: string
   tagline: string
   size: number
-  // World-space position: [x, y, z]
-  // Z-axis is the flight path. Sukku is at z=0 (closest to camera at max scroll).
-  // Higher Z = further from camera at start, encountered first during scroll.
   position: [number, number, number]
 }
 
@@ -22,7 +19,7 @@ export const PLANETS: Planet[] = [
     glowColor: '#FF8C42',
     bgColor: '#1A0A00',
     tagline: "An AI that doesn't just respond — it understands, remembers, and lives alongside you.",
-    size: 2.2,
+    size: 2.4,
     position: [0, 0, 0],
   },
   {
@@ -33,8 +30,8 @@ export const PLANETS: Planet[] = [
     glowColor: '#6A3DE8',
     bgColor: '#060D1A',
     tagline: 'Multimodal emotion recognition — video, audio, text — at 98% accuracy.',
-    size: 1.5,
-    position: [-3, 0.5, 5],
+    size: 1.6,
+    position: [-5, 0.8, 18],
   },
   {
     id: 'genco',
@@ -44,8 +41,8 @@ export const PLANETS: Planet[] = [
     glowColor: '#45B7D1',
     bgColor: '#051A18',
     tagline: 'Anonymous chat for real conversations.',
-    size: 1.2,
-    position: [4, -0.5, 10],
+    size: 1.3,
+    position: [6, -1.2, 32],
   },
   {
     id: 'ai-learning',
@@ -55,8 +52,8 @@ export const PLANETS: Planet[] = [
     glowColor: '#FFAA33',
     bgColor: '#1A1400',
     tagline: 'Real-time AI tutors that adapt to every learner.',
-    size: 1.1,
-    position: [-2.5, 1.0, 15],
+    size: 1.2,
+    position: [-4, 1.5, 46],
   },
   {
     id: 'design-system',
@@ -67,10 +64,10 @@ export const PLANETS: Planet[] = [
     bgColor: '#0A0A0A',
     tagline: 'A precise, minimal component system.',
     size: 1.0,
-    position: [3.5, -1.0, 20],
+    position: [5, -2.0, 58],
   },
 ]
 
-// Camera starts close enough to see all planets — Sukku (z=0) is 20 units away on arrival
-export const CAMERA_START_Z = 20
-export const CAMERA_END_Z = 3
+// Camera flies from Z=75 (hero, planets are tiny dots) to Z=5 (close to Sukku)
+export const CAMERA_START_Z = 75
+export const CAMERA_END_Z = 5

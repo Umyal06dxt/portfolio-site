@@ -2,7 +2,6 @@
 
 import { useRef, useEffect } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { useScroll } from '@react-three/drei'
 import * as THREE from 'three'
 import { Planet } from './planet'
 import { Ufo } from './ufo'
@@ -26,7 +25,7 @@ type Props = {
 
 export function GalaxyScene({ onPlanetClick }: Props) {
   const { camera, gl, scene } = useThree()
-  const scroll = useScroll()
+  const scrollY = useRef(0)
   const zoom = useRef<ZoomState>({
     active: false,
     target: null,
@@ -36,12 +35,19 @@ export function GalaxyScene({ onPlanetClick }: Props) {
     startY: 0,
   })
 
-  // Cinematic tone mapping + fog — run once on mount
+  // Cinematic rendering
   useEffect(() => {
     gl.toneMapping = THREE.ACESFilmicToneMapping
-    gl.toneMappingExposure = 1.3
-    scene.fog = new THREE.FogExp2('#050505', 0.018)
+    gl.toneMappingExposure = 1.2
+    scene.fog = new THREE.FogExp2('#050505', 0.012)
   }, [gl, scene])
+
+  // Track native page scroll
+  useEffect(() => {
+    const onScroll = () => { scrollY.current = window.scrollY }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   useFrame((_, delta) => {
     if (zoom.current.active && zoom.current.target) {
@@ -52,8 +58,19 @@ export function GalaxyScene({ onPlanetClick }: Props) {
       camera.position.x = zoom.current.startX + (zoom.current.target.position[0] - zoom.current.startX) * t
       camera.position.y = zoom.current.startY + (zoom.current.target.position[1] - zoom.current.startY) * t
     } else {
-      const range = CAMERA_START_Z - CAMERA_END_Z
-      camera.position.z = CAMERA_START_Z - scroll.offset * range
+      // Native scroll → camera Z
+      const scrollMax = Math.max(1,
+        document.documentElement.scrollHeight - window.innerHeight
+      )
+      const progress = Math.min(1, scrollY.current / scrollMax)
+      const targetZ = CAMERA_START_Z - progress * (CAMERA_START_Z - CAMERA_END_Z)
+
+      // Smooth lerp
+      camera.position.z += (targetZ - camera.position.z) * Math.min(1, delta * 4)
+
+      // Subtle upward drift as you fly in
+      const targetY = (1 - progress) * 0.8
+      camera.position.y += (targetY - camera.position.y) * delta * 2
     }
   })
 
@@ -73,21 +90,10 @@ export function GalaxyScene({ onPlanetClick }: Props) {
     <>
       <StarField />
 
-      {/* Low ambient — planets glow from emissive, not from ambient fill */}
-      <ambientLight intensity={0.15} color="#0d1020" />
-
-      {/* Main key light — slightly warm, from upper right */}
-      <directionalLight
-        position={[8, 6, 10]}
-        intensity={1.8}
-        color="#ffe8d0"
-      />
-
-      {/* Sukku accent — warm orange from below-left, makes it feel like the gravity center */}
-      <pointLight position={[-4, -3, 2]} intensity={4.0} color="#FF6B2B" distance={25} />
-
-      {/* Cool fill from opposite side */}
-      <pointLight position={[6, 4, -5]} intensity={1.2} color="#3a6fd8" distance={30} />
+      <ambientLight intensity={0.12} color="#0d1020" />
+      <directionalLight position={[8, 6, 10]} intensity={2.0} color="#ffe8d0" />
+      <pointLight position={[-3, -2, 5]} intensity={5} color="#FF6B2B" distance={30} />
+      <pointLight position={[8, 4, -8]} intensity={1.5} color="#3a6fd8" distance={40} />
 
       {PLANETS.map(planet => (
         <Planet

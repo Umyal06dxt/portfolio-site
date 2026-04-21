@@ -75,6 +75,51 @@ export default function HomePage() {
         </a>
       </div>
 
+      {/* Reduced-motion static fallback — hidden by default, shown via CSS media query */}
+      <div className="motion-fallback hidden fixed inset-0 bg-[#050505] text-white overflow-y-auto">
+        <div className="max-w-2xl mx-auto px-8 py-24 space-y-12">
+          <div>
+            <h1 className="text-4xl font-[Syne] font-light text-white/90 mb-2" style={{ letterSpacing: '-0.02em' }}>
+              Umyal Dixit
+            </h1>
+            <p className="text-white/40 font-[Manrope] text-sm tracking-widest uppercase">
+              Creative Engineer · Delhi, IN · Open to Work
+            </p>
+            <p className="text-white/50 font-[Manrope] mt-2">Fluid Interfaces &amp; AI Agents</p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4">
+            {[
+              { href: '/projects/sukku', name: 'Sukku', tagline: 'AI Companion System', color: '#FF6B2B' },
+              { href: '/projects/emotion-ai', name: 'Emotion AI', tagline: 'Multimodal Emotion Recognition', color: '#4A90E2' },
+              { href: '/projects/genco', name: 'Genco', tagline: 'Anonymous Chat', color: '#4ECDC4' },
+              { href: '/projects/ai-learning', name: 'AI Learning', tagline: 'Real-time Tutors', color: '#FFD166' },
+              { href: '/projects/design-system', name: 'Design System', tagline: 'Component System', color: '#E8E8E8' },
+            ].map(p => (
+              <a
+                key={p.href}
+                href={p.href}
+                className="border border-white/10 hover:border-white/25 p-6 transition-colors duration-200 group"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="font-[Syne] text-white/80 text-xl mb-1">{p.name}</h2>
+                    <p className="font-[Manrope] text-white/40 text-sm">{p.tagline}</p>
+                  </div>
+                  <span className="text-white/20 group-hover:text-white/60 transition-colors">→</span>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <div className="flex gap-6 pt-4">
+            <a href="https://linkedin.com/in/umyaldixit" target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-white/70 font-[Manrope] text-xs tracking-widest uppercase transition-colors">LinkedIn</a>
+            <a href="https://x.com/umyaldixit" target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-white/70 font-[Manrope] text-xs tracking-widest uppercase transition-colors">X</a>
+            <a href="mailto:hello@umyal.dev" className="text-white/30 hover:text-white/70 font-[Manrope] text-xs tracking-widest uppercase transition-colors">Email</a>
+          </div>
+        </div>
+      </div>
+
       {/* Transition overlay — fades in on planet click, bridges to interior page */}
       <div
         className={`fixed inset-0 z-50 transition-opacity duration-700 ${overlay.visible ? 'pointer-events-auto' : 'pointer-events-none'}`}

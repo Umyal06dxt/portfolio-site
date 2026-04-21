@@ -1,8 +1,9 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useScroll } from '@react-three/drei'
+import * as THREE from 'three'
 import { Planet } from './planet'
 import { Ufo } from './ufo'
 import { StarField } from './star-field'
@@ -24,7 +25,7 @@ type Props = {
 }
 
 export function GalaxyScene({ onPlanetClick }: Props) {
-  const { camera } = useThree()
+  const { camera, gl, scene } = useThree()
   const scroll = useScroll()
   const zoom = useRef<ZoomState>({
     active: false,
@@ -35,6 +36,13 @@ export function GalaxyScene({ onPlanetClick }: Props) {
     startY: 0,
   })
 
+  // Cinematic tone mapping + fog — run once on mount
+  useEffect(() => {
+    gl.toneMapping = THREE.ACESFilmicToneMapping
+    gl.toneMappingExposure = 1.3
+    scene.fog = new THREE.FogExp2('#050505', 0.018)
+  }, [gl, scene])
+
   useFrame((_, delta) => {
     if (zoom.current.active && zoom.current.target) {
       zoom.current.progress = Math.min(1, zoom.current.progress + delta * 1.1)
@@ -44,7 +52,6 @@ export function GalaxyScene({ onPlanetClick }: Props) {
       camera.position.x = zoom.current.startX + (zoom.current.target.position[0] - zoom.current.startX) * t
       camera.position.y = zoom.current.startY + (zoom.current.target.position[1] - zoom.current.startY) * t
     } else {
-      // Scroll-driven flight
       const range = CAMERA_START_Z - CAMERA_END_Z
       camera.position.z = CAMERA_START_Z - scroll.offset * range
     }
@@ -65,9 +72,22 @@ export function GalaxyScene({ onPlanetClick }: Props) {
   return (
     <>
       <StarField />
-      <ambientLight intensity={0.05} />
-      <pointLight position={[10, 10, 20]} intensity={1.0} color="#ffffff" />
-      <pointLight position={[-10, -5, 10]} intensity={0.4} color="#FF6B2B" />
+
+      {/* Low ambient — planets glow from emissive, not from ambient fill */}
+      <ambientLight intensity={0.15} color="#0d1020" />
+
+      {/* Main key light — slightly warm, from upper right */}
+      <directionalLight
+        position={[8, 6, 10]}
+        intensity={1.8}
+        color="#ffe8d0"
+      />
+
+      {/* Sukku accent — warm orange from below-left, makes it feel like the gravity center */}
+      <pointLight position={[-4, -3, 2]} intensity={4.0} color="#FF6B2B" distance={25} />
+
+      {/* Cool fill from opposite side */}
+      <pointLight position={[6, 4, -5]} intensity={1.2} color="#3a6fd8" distance={30} />
 
       {PLANETS.map(planet => (
         <Planet

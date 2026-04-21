@@ -14,14 +14,21 @@ export default function HomePage() {
     color: '#050505',
     visible: false,
   })
-
   const [isMobile, setIsMobile] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Fade out hero text when user starts scrolling
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   const handlePlanetClick = useCallback((slug: string, bgColor: string) => {
@@ -30,108 +37,129 @@ export default function HomePage() {
   }, [router])
 
   return (
-    <main className="w-full h-screen bg-[#050505] overflow-hidden motion-canvas">
-      {/* Mobile map view — shown on viewports < 768px */}
+    <main className="w-full h-screen bg-[#050505] overflow-hidden motion-canvas" style={{ position: 'relative' }}>
+
+      {/* ── Mobile map view ─────────────────────────────────── */}
       {isMobile && (
         <div className="fixed inset-0 bg-[#050505] text-white overflow-y-auto z-40">
           <div className="px-6 pt-16 pb-24">
             <div className="mb-12">
               <h1 className="text-3xl font-[Syne] font-light text-white/90 mb-1">Umyal Dixit</h1>
-              <p className="text-white/40 font-[Manrope] text-xs tracking-widest uppercase">Creative Engineer · Delhi, IN</p>
+              <p className="text-white/40 font-[Manrope] text-xs tracking-[0.2em] uppercase">Creative Engineer · Delhi, IN</p>
             </div>
             <div className="grid grid-cols-1 gap-3">
               {PLANETS.map(planet => (
                 <button
                   key={planet.id}
                   onClick={() => handlePlanetClick(planet.slug, planet.bgColor)}
-                  className="text-left border border-white/8 active:border-white/20 p-5 transition-colors duration-150"
-                  style={{ borderLeftColor: planet.color, borderLeftWidth: '2px' }}
+                  className="text-left p-5 transition-all duration-200 active:opacity-70"
+                  style={{ borderLeft: `2px solid ${planet.color}`, background: `${planet.color}08` }}
                 >
-                  <div className="flex items-center gap-3 mb-2">
-                    <div
-                      className="w-3 h-3 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: planet.color, boxShadow: `0 0 8px ${planet.glowColor}` }}
-                    />
-                    <span className="font-[Syne] text-white/80 text-lg">{planet.name}</span>
+                  <div className="flex items-center gap-3 mb-1">
+                    <span className="font-[Syne] text-white/85 text-lg">{planet.name}</span>
                   </div>
-                  <p className="font-[Manrope] text-white/40 text-sm leading-relaxed pl-6">{planet.tagline}</p>
+                  <p className="font-[Manrope] text-white/40 text-sm leading-relaxed">{planet.tagline}</p>
                 </button>
               ))}
             </div>
             <div className="flex gap-6 mt-12">
-              <a href="https://linkedin.com/in/umyaldixit" target="_blank" rel="noopener noreferrer" className="text-white/30 font-[Manrope] text-xs tracking-widest uppercase">LinkedIn</a>
-              <a href="https://x.com/umyaldixit" target="_blank" rel="noopener noreferrer" className="text-white/30 font-[Manrope] text-xs tracking-widest uppercase">X</a>
-              <a href="mailto:hello@umyal.dev" className="text-white/30 font-[Manrope] text-xs tracking-widest uppercase">Email</a>
+              <a href="https://linkedin.com/in/umyaldixit" target="_blank" rel="noopener noreferrer" className="text-white/40 font-[Manrope] text-xs tracking-widest uppercase">LinkedIn</a>
+              <a href="https://x.com/umyaldixit" target="_blank" rel="noopener noreferrer" className="text-white/40 font-[Manrope] text-xs tracking-widest uppercase">X</a>
+              <a href="mailto:hello@umyal.dev" className="text-white/40 font-[Manrope] text-xs tracking-widest uppercase">Email</a>
             </div>
           </div>
         </div>
       )}
+
+      {/* ── 3D Canvas ───────────────────────────────────────── */}
       <Canvas
         camera={{ position: [0, 0, 20], fov: 60, near: 0.1, far: 200 }}
         gl={{ antialias: true, alpha: false }}
-        style={{ background: '#050505' }}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+        dpr={[1, 2]}
       >
         <ScrollControls pages={2} damping={0.3}>
           <GalaxyScene onPlanetClick={handlePlanetClick} />
         </ScrollControls>
         <EffectComposer>
           <Bloom
-            intensity={0.8}
-            luminanceThreshold={0.3}
-            luminanceSmoothing={0.9}
-            radius={0.7}
+            intensity={1.4}
+            luminanceThreshold={0.2}
+            luminanceSmoothing={0.7}
+            radius={0.9}
           />
         </EffectComposer>
       </Canvas>
 
-      {/* Hero intro text — visible on arrival, fades as user scrolls */}
-      <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none text-center" style={{ marginTop: '-120px' }}>
-        <h1 className="text-6xl md:text-7xl font-[Syne] font-light text-white/90 mb-3" style={{ letterSpacing: '-0.03em' }}>
-          Umyal Dixit
-        </h1>
-        <p className="text-sm font-[Manrope] tracking-[0.25em] uppercase text-white/50">
-          Creative Engineer · Fluid Interfaces & AI Agents
-        </p>
-        <p className="text-xs font-[Manrope] tracking-widest uppercase text-white/25 mt-2">
-          Scroll to explore
-        </p>
+      {/* ── Hero text ───────────────────────────────────────── */}
+      <div
+        className="fixed inset-0 z-10 flex flex-col justify-between pointer-events-none"
+        style={{
+          opacity: scrolled ? 0 : 1,
+          transition: 'opacity 0.6s ease',
+        }}
+      >
+        {/* Name — top left */}
+        <div className="px-8 pt-10 md:px-12 md:pt-12">
+          <h1
+            className="font-[Syne] text-white leading-none"
+            style={{
+              fontSize: 'clamp(2.5rem, 6vw, 5rem)',
+              fontWeight: 300,
+              letterSpacing: '-0.03em',
+            }}
+          >
+            Umyal Dixit
+          </h1>
+          <p
+            className="font-[Manrope] text-white/50 mt-2"
+            style={{ fontSize: 'clamp(0.7rem, 1.2vw, 0.85rem)', letterSpacing: '0.22em' }}
+          >
+            CREATIVE ENGINEER &nbsp;·&nbsp; FLUID INTERFACES &amp; AI AGENTS
+          </p>
+        </div>
+
+        {/* Scroll hint — bottom center */}
+        <div className="pb-10 flex justify-center">
+          <div className="flex flex-col items-center gap-2">
+            <div
+              className="w-px bg-white/20"
+              style={{
+                height: '40px',
+                animation: 'scrollline 2s ease-in-out infinite',
+              }}
+            />
+            <p className="font-[Manrope] text-white/25 text-[10px] tracking-[0.25em] uppercase">Scroll</p>
+          </div>
+        </div>
       </div>
 
-      {/* HUD — identity text */}
-      <div className="fixed bottom-6 left-8 z-20 pointer-events-none">
-        <p className="text-white/60 text-[12px] font-[Manrope] tracking-wider">
+      {/* ── Bottom HUD ──────────────────────────────────────── */}
+      <div className="fixed bottom-7 left-8 z-20 pointer-events-none">
+        <p className="text-white/40 font-[Manrope]" style={{ fontSize: '11px', letterSpacing: '0.08em' }}>
           Delhi, IN · Open to Work
         </p>
       </div>
-
-      {/* HUD — social links */}
-      <div className="fixed bottom-6 right-8 z-20 flex items-center gap-4">
-        <a
-          href="https://linkedin.com/in/umyaldixit"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-white/50 hover:text-white/90 text-[12px] font-[Manrope] tracking-widest uppercase transition-colors duration-300"
-        >
-          LinkedIn
-        </a>
-        <a
-          href="https://x.com/umyaldixit"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-white/50 hover:text-white/90 text-[12px] font-[Manrope] tracking-widest uppercase transition-colors duration-300"
-        >
-          X
-        </a>
-        <a
-          href="mailto:hello@umyal.dev"
-          className="text-white/50 hover:text-white/90 text-[12px] font-[Manrope] tracking-widest uppercase transition-colors duration-300"
-        >
-          Email
-        </a>
+      <div className="fixed bottom-7 right-8 z-20 flex items-center gap-5">
+        {[
+          { label: 'LinkedIn', href: 'https://linkedin.com/in/umyaldixit', external: true },
+          { label: 'X', href: 'https://x.com/umyaldixit', external: true },
+          { label: 'Email', href: 'mailto:hello@umyal.dev', external: false },
+        ].map(({ label, href, external }) => (
+          <a
+            key={label}
+            href={href}
+            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            className="text-white/40 hover:text-white/90 font-[Manrope] transition-colors duration-300"
+            style={{ fontSize: '11px', letterSpacing: '0.15em' }}
+          >
+            {label}
+          </a>
+        ))}
       </div>
 
-      {/* Reduced-motion static fallback — hidden by default, shown via CSS media query */}
-      <div className="motion-fallback hidden fixed inset-0 bg-[#050505] text-white overflow-y-auto">
+      {/* ── Reduced-motion fallback ─────────────────────────── */}
+      <div className="motion-fallback hidden fixed inset-0 bg-[#050505] text-white overflow-y-auto z-30">
         <div className="max-w-2xl mx-auto px-8 py-24 space-y-12">
           <div>
             <h1 className="text-4xl font-[Syne] font-light text-white/90 mb-2" style={{ letterSpacing: '-0.02em' }}>
@@ -142,18 +170,11 @@ export default function HomePage() {
             </p>
             <p className="text-white/50 font-[Manrope] mt-2">Fluid Interfaces &amp; AI Agents</p>
           </div>
-
           <div className="grid grid-cols-1 gap-4">
-            {[
-              { href: '/projects/sukku', name: 'Sukku', tagline: 'AI Companion System', color: '#FF6B2B' },
-              { href: '/projects/emotion-ai', name: 'Emotion AI', tagline: 'Multimodal Emotion Recognition', color: '#4A90E2' },
-              { href: '/projects/genco', name: 'Genco', tagline: 'Anonymous Chat', color: '#4ECDC4' },
-              { href: '/projects/ai-learning', name: 'AI Learning', tagline: 'Real-time Tutors', color: '#FFD166' },
-              { href: '/projects/design-system', name: 'Design System', tagline: 'Component System', color: '#E8E8E8' },
-            ].map(p => (
+            {PLANETS.map(p => (
               <a
                 key={p.href}
-                href={p.href}
+                href={`/projects/${p.slug}`}
                 className="border border-white/10 hover:border-white/25 p-6 transition-colors duration-200 group"
               >
                 <div className="flex items-center justify-between">
@@ -166,7 +187,6 @@ export default function HomePage() {
               </a>
             ))}
           </div>
-
           <div className="flex gap-6 pt-4">
             <a href="https://linkedin.com/in/umyaldixit" target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-white/70 font-[Manrope] text-xs tracking-widest uppercase transition-colors">LinkedIn</a>
             <a href="https://x.com/umyaldixit" target="_blank" rel="noopener noreferrer" className="text-white/30 hover:text-white/70 font-[Manrope] text-xs tracking-widest uppercase transition-colors">X</a>
@@ -175,16 +195,13 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Transition overlay — fades in on planet click, bridges to interior page */}
+      {/* ── Transition overlay ──────────────────────────────── */}
       <div
         className={`fixed inset-0 z-50 transition-opacity duration-700 ${overlay.visible ? 'pointer-events-auto' : 'pointer-events-none'}`}
-        style={{
-          backgroundColor: overlay.color,
-          opacity: overlay.visible ? 1 : 0,
-        }}
+        style={{ backgroundColor: overlay.color, opacity: overlay.visible ? 1 : 0 }}
       />
 
-      {/* No-JS fallback */}
+      {/* ── No-JS fallback ──────────────────────────────────── */}
       <noscript>
         <div className="fixed inset-0 bg-[#050505] text-white p-8 overflow-y-auto">
           <h1 className="text-2xl font-display mb-2">Umyal Dixit</h1>
@@ -198,6 +215,13 @@ export default function HomePage() {
           </ul>
         </div>
       </noscript>
+
+      <style>{`
+        @keyframes scrollline {
+          0%, 100% { transform: scaleY(0); transform-origin: top; }
+          50% { transform: scaleY(1); transform-origin: top; }
+        }
+      `}</style>
     </main>
   )
 }

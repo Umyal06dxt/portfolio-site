@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Canvas } from '@react-three/fiber'
 import { ScrollControls } from '@react-three/drei'
 import { GalaxyScene } from '@/components/galaxy/scene'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 export default function HomePage() {
   const router = useRouter()
@@ -28,6 +29,14 @@ export default function HomePage() {
         <ScrollControls pages={4} damping={0.25}>
           <GalaxyScene onPlanetClick={handlePlanetClick} />
         </ScrollControls>
+        <EffectComposer>
+          <Bloom
+            intensity={0.8}
+            luminanceThreshold={0.3}
+            luminanceSmoothing={0.9}
+            radius={0.7}
+          />
+        </EffectComposer>
       </Canvas>
 
       {/* HUD — identity text */}

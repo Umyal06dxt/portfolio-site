@@ -19,9 +19,10 @@ export function PlanetInteriorLayout({ children, bgColor, planetName }: Props) {
       className="text-white"
     >
       {/* Fixed navigation */}
-      <div className="fixed top-0 left-0 right-0 z-10 flex items-center justify-between px-8 py-6">
+      <nav aria-label="Page navigation" className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6">
         <Link
           href="/"
+          aria-label="Back to home"
           className="text-white/50 hover:text-white/90 text-sm font-[Manrope] tracking-widest uppercase transition-colors duration-200"
         >
           ← orbit
@@ -29,7 +30,7 @@ export function PlanetInteriorLayout({ children, bgColor, planetName }: Props) {
         <span className="text-white/30 text-xs font-[Manrope] tracking-widest uppercase">
           {planetName}
         </span>
-      </div>
+      </nav>
 
       {/* Content with staggered entrance */}
       <motion.div

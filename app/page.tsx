@@ -32,7 +32,7 @@ export default function HomePage() {
 
       {/* Transition overlay — fades in on planet click, bridges to interior page */}
       <div
-        className="fixed inset-0 z-50 pointer-events-none transition-opacity duration-700"
+        className={`fixed inset-0 z-50 transition-opacity duration-700 ${overlay.visible ? 'pointer-events-auto' : 'pointer-events-none'}`}
         style={{
           backgroundColor: overlay.color,
           opacity: overlay.visible ? 1 : 0,

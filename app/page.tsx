@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Canvas } from '@react-three/fiber'
 import { ScrollControls } from '@react-three/drei'
 import { GalaxyScene } from '@/components/galaxy/scene'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import { PLANETS } from '@/lib/planets'
 
 export default function HomePage() {
   const router = useRouter()
@@ -14,6 +15,15 @@ export default function HomePage() {
     visible: false,
   })
 
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
   const handlePlanetClick = useCallback((slug: string, bgColor: string) => {
     setOverlay({ color: bgColor, visible: true })
     setTimeout(() => router.push(`/projects/${slug}`), 800)
@@ -21,6 +31,41 @@ export default function HomePage() {
 
   return (
     <main className="w-full h-screen bg-[#050505] overflow-hidden motion-canvas">
+      {/* Mobile map view — shown on viewports < 768px */}
+      {isMobile && (
+        <div className="fixed inset-0 bg-[#050505] text-white overflow-y-auto z-40">
+          <div className="px-6 pt-16 pb-24">
+            <div className="mb-12">
+              <h1 className="text-3xl font-[Syne] font-light text-white/90 mb-1">Umyal Dixit</h1>
+              <p className="text-white/40 font-[Manrope] text-xs tracking-widest uppercase">Creative Engineer · Delhi, IN</p>
+            </div>
+            <div className="grid grid-cols-1 gap-3">
+              {PLANETS.map(planet => (
+                <button
+                  key={planet.id}
+                  onClick={() => handlePlanetClick(planet.slug, planet.bgColor)}
+                  className="text-left border border-white/8 active:border-white/20 p-5 transition-colors duration-150"
+                  style={{ borderLeftColor: planet.color, borderLeftWidth: '2px' }}
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <div
+                      className="w-3 h-3 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: planet.color, boxShadow: `0 0 8px ${planet.glowColor}` }}
+                    />
+                    <span className="font-[Syne] text-white/80 text-lg">{planet.name}</span>
+                  </div>
+                  <p className="font-[Manrope] text-white/40 text-sm leading-relaxed pl-6">{planet.tagline}</p>
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-6 mt-12">
+              <a href="https://linkedin.com/in/umyaldixit" target="_blank" rel="noopener noreferrer" className="text-white/30 font-[Manrope] text-xs tracking-widest uppercase">LinkedIn</a>
+              <a href="https://x.com/umyaldixit" target="_blank" rel="noopener noreferrer" className="text-white/30 font-[Manrope] text-xs tracking-widest uppercase">X</a>
+              <a href="mailto:hello@umyal.dev" className="text-white/30 font-[Manrope] text-xs tracking-widest uppercase">Email</a>
+            </div>
+          </div>
+        </div>
+      )}
       <Canvas
         camera={{ position: [0, 0, 55], fov: 60, near: 0.1, far: 200 }}
         gl={{ antialias: true, alpha: false }}

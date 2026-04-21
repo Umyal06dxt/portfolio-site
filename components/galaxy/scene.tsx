@@ -5,6 +5,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useScroll } from '@react-three/drei'
 import { Planet } from './planet'
 import { Ufo } from './ufo'
+import { StarField } from './star-field'
 import { PLANETS, CAMERA_START_Z, CAMERA_END_Z } from '@/lib/planets'
 import type { Planet as PlanetType } from '@/lib/planets'
 import { easeInOutCubic } from '@/lib/easing'
@@ -63,6 +64,7 @@ export function GalaxyScene({ onPlanetClick }: Props) {
 
   return (
     <>
+      <StarField />
       <ambientLight intensity={0.05} />
       <pointLight position={[10, 10, 20]} intensity={1.0} color="#ffffff" />
       <pointLight position={[-10, -5, 10]} intensity={0.4} color="#FF6B2B" />

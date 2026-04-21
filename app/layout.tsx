@@ -15,8 +15,12 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Umyal Dixit | Engineer & Designer",
-  description: "Portfolio of Umyal Dixit - Building robust systems with maximalist design.",
+  title: "Umyal Dixit | Creative Engineer",
+  description: "Portfolio of Umyal Dixit — Fluid Interfaces & AI Agents. Delhi, IN.",
+  openGraph: {
+    title: "Umyal Dixit | Creative Engineer",
+    description: "Fluid Interfaces & AI Agents",
+  },
 };
 
 export default function RootLayout({
@@ -27,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${syne.variable} ${manrope.variable} antialiased font-sans bg-black text-white selection:bg-[#E85002] selection:text-white`}
+        className={`${syne.variable} ${manrope.variable} antialiased font-sans bg-black text-white selection:bg-[#FF6B2B] selection:text-white`}
       >
         {children}
       </body>

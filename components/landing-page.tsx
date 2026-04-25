@@ -1,17 +1,13 @@
 "use client";
 
-import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import {
-  motion,
-  useInView,
-  useScroll,
-  useTransform,
-  Variants,
-} from "framer-motion";
+import Magnetic from "@/components/magnetic";
+import Navbar from "@/components/navbar";
+import { useScramble } from "@/hooks/use-scramble";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 
 /* ─── Data ──────────────────────────────────────────────────── */
 
@@ -24,369 +20,887 @@ const marqueeItems = [
   "Public Speaker",
   "Late-night Builder",
   "System Thinker",
+  "Web3 Builder",
+  "Emotion AI",
 ];
 
-interface Project {
-  name: string;
-  status: "live" | "research";
-  statusLabel: string;
-  tagline: string;
-  tags: string[];
-}
-
-const projects: Project[] = [
+const featuredProjects = [
   {
-    name: "VERIS",
-    status: "live",
-    statusLabel: "In development",
-    tagline: "Hardware proof that a photograph is real. Built for an age of deepfakes.",
-    tags: ["Web3", "Blockchain", "Hardware", "CV"],
+    num: "01",
+    name: "Veris",
+    status: "live" as const,
+    tagline: "Hardware proof that a photograph is real.",
+    desc: "Built for an age of deepfakes. Hardware-first authenticity embedded at the moment of capture.",
+    tags: ["Web3", "Blockchain", "CV"],
+    visual: "veris" as const,
   },
   {
-    name: "SUKKU",
-    status: "live",
-    statusLabel: "In development",
-    tagline: "An AI companion that doesn't just respond — it notices.",
-    tags: ["Edge AI", "NLP", "Computer Vision", "Behavioral Modeling"],
+    num: "02",
+    name: "Sukku",
+    status: "live" as const,
+    tagline: "An AI companion that notices.",
+    desc: "Proactive, emotionally aware, contextually intelligent. Not another reactive assistant.",
+    tags: ["Edge AI", "NLP", "Behavioral AI"],
+    visual: "sukku" as const,
   },
   {
-    name: "EMOTION AI",
-    status: "research",
-    statusLabel: "Research",
-    tagline: "Classifying 26 complex human emotions from a single face.",
-    tags: ["Deep Learning", "PyTorch", "Attention"],
+    num: "03",
+    name: "Emotion AI",
+    status: "research" as const,
+    tagline: "26 emotions. One face.",
+    desc: "Deep learning beyond 6 basic emotions — into contempt, awe, confusion, embarrassment.",
+    tags: ["PyTorch", "Attention", "Research"],
+    visual: "emotion" as const,
   },
 ];
 
-const questions = [
-  "Can a machine recognize the difference between a smile that means happiness and a smile that means pain?",
-  "Can we build AI companions that people trust — not because they're programmed to seem trustworthy, but because they earned it?",
+const researchQs = [
+  "Can a machine tell the difference between a smile that means happiness and a smile that means pain?",
+  "Can we build AI companions that earn trust — not just simulate it?",
   "In a world where any image can be faked, what does it mean to prove something is real?",
-  "How do we build systems that don't just respond to humans — but adapt to them, remember them, and grow with them?",
+  "How do we build systems that don't just respond to humans — but grow with them?",
 ];
 
-/* ─── Framer Motion variants ─────────────────────────────────── */
+const heroLines = [
+  { text: "I don't just", color: "var(--fg)" },
+  { text: "build things.", color: "var(--accent)" },
+  { text: "I imagine what", color: "var(--fg-muted)" },
+  { text: "they could mean.", color: "var(--fg-muted)" },
+];
 
-const wordVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.07,
-      duration: 0.75,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  }),
-};
+/* ─── Hero dot grid background ──────────────────────────────── */
 
-const fadeUpVariants: Variants = {
-  hidden: { opacity: 0, y: 28 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.11,
-      duration: 0.7,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  }),
-};
+function HeroDotGrid() {
+  const cols = 20;
+  const rows = 12;
+  const total = cols * rows;
 
-/* ─── Word-split helper ──────────────────────────────────────── */
+  const dotRng = useMemo(
+    () =>
+      Array.from({ length: total }, () => ({
+        chance: Math.random(),
+        duration: 3 + Math.random() * 4,
+        delay: Math.random() * 5,
+      })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
 
-function AnimatedWords({
-  text,
-  baseDelay = 0,
-  className = "",
-}: {
-  text: string;
-  baseDelay?: number;
-  className?: string;
-}) {
-  const words = text.split(" ");
   return (
-    <>
-      {words.map((word, i) => (
-        <motion.span
-          key={i}
-          custom={baseDelay + i}
-          variants={wordVariants}
-          initial="hidden"
-          animate="visible"
-          className={`inline-block ${className}`}
-          style={{ marginRight: "0.28em" }}
-        >
-          {word}
-        </motion.span>
-      ))}
-    </>
+    <div
+      aria-hidden
+      style={{
+        position: "absolute",
+        inset: 0,
+        display: "grid",
+        gridTemplateColumns: `repeat(${cols}, 1fr)`,
+        gridTemplateRows: `repeat(${rows}, 1fr)`,
+        pointerEvents: "none",
+        zIndex: 0,
+        maskImage:
+          "radial-gradient(ellipse 70% 70% at 75% 50%, black 20%, transparent 80%)",
+      }}
+    >
+      {Array.from({ length: total }, (_, i) => {
+        const col = i % cols;
+        const row = Math.floor(i / cols);
+        const distFromRight = cols - col;
+        const { chance, duration, delay } = dotRng[i];
+        const isLit = chance > 0.85 && distFromRight < 14;
+
+        return (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0 }}
+            animate={
+              isLit
+                ? { opacity: [0, 0.6, 0.2, 0.7, 0.1, 0.5] }
+                : { opacity: 0.06 }
+            }
+            transition={
+              isLit
+                ? {
+                    duration,
+                    delay,
+                    repeat: Infinity,
+                    repeatType: "mirror",
+                  }
+                : { duration: 1, delay: (col + row) * 0.02 }
+            }
+            style={{
+              width: 3,
+              height: 3,
+              borderRadius: "50%",
+              background: isLit ? "var(--accent)" : "var(--fg)",
+              justifySelf: "center",
+              alignSelf: "center",
+            }}
+          />
+        );
+      })}
+    </div>
   );
 }
 
-/* ─── Section label ──────────────────────────────────────────── */
+/* ─── Project card visuals — unique per project ─────────────── */
 
-function SectionLabel({ children, num }: { children: string; num: string }) {
+function VerisVisual() {
+  /* Hexagonal grid + scan line — represents blockchain verification */
+  const hexSize = 18;
+  const hxs: { x: number; y: number }[] = [];
+  for (let row = 0; row < 5; row++) {
+    for (let col = 0; col < 9; col++) {
+      hxs.push({
+        x: col * (hexSize * 1.75) + (row % 2 === 0 ? 0 : hexSize * 0.875),
+        y: row * (hexSize * 1.5),
+      });
+    }
+  }
+
   return (
-    <div className="flex items-center gap-3 mb-6">
-      <span className="num-tag">{num}</span>
-      <span className="dot-accent" />
-      <span className="label">{children}</span>
+    <div
+      style={{
+        position: "relative",
+        height: 150,
+        overflow: "hidden",
+        background: "rgba(255,95,31,0.04)",
+        borderBottom: "1px solid var(--border)",
+      }}
+    >
+      <svg
+        width="100%"
+        height="100%"
+        style={{ position: "absolute", inset: 0, opacity: 0.35 }}
+      >
+        {hxs.map((h, i) => (
+          <motion.polygon
+            key={i}
+            points={`${h.x},${h.y - hexSize} ${h.x + hexSize * 0.866},${h.y - hexSize * 0.5} ${h.x + hexSize * 0.866},${h.y + hexSize * 0.5} ${h.x},${h.y + hexSize} ${h.x - hexSize * 0.866},${h.y + hexSize * 0.5} ${h.x - hexSize * 0.866},${h.y - hexSize * 0.5}`}
+            fill="none"
+            stroke="var(--accent)"
+            strokeWidth="0.5"
+            initial={{ opacity: 0.1 }}
+            animate={{ opacity: [0.1, 0.5, 0.1] }}
+            transition={{
+              duration: 2 + (i % 5) * 0.4,
+              delay: i * 0.05,
+              repeat: Infinity,
+            }}
+          />
+        ))}
+      </svg>
+
+      {/* Scan line sweeping top → bottom */}
+      <motion.div
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          height: 2,
+          background:
+            "linear-gradient(90deg, transparent 0%, var(--accent) 30%, rgba(255,95,31,0.6) 60%, transparent 100%)",
+          boxShadow: "0 0 12px var(--accent)",
+        }}
+        animate={{ top: ["-5%", "110%"] }}
+        transition={{
+          duration: 2.2,
+          repeat: Infinity,
+          ease: "linear",
+          repeatDelay: 0.8,
+        }}
+      />
+
+      {/* Verified badge */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 12,
+          right: 14,
+          fontFamily: "var(--font-mono)",
+          fontSize: 9,
+          color: "var(--accent)",
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          opacity: 0.7,
+        }}
+      >
+        chain-of-custody
+      </div>
+    </div>
+  );
+}
+
+function SukkuVisual() {
+  /* Radar rings pulsing outward — "noticing" / sensing presence */
+  const rings = [0, 1, 2, 3, 4];
+  return (
+    <div
+      style={{
+        position: "relative",
+        height: 150,
+        overflow: "hidden",
+        background: "rgba(255,95,31,0.03)",
+        borderBottom: "1px solid var(--border)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {rings.map((i) => (
+        <motion.div
+          key={i}
+          style={{
+            position: "absolute",
+            borderRadius: "50%",
+            border: "1px solid var(--accent)",
+          }}
+          animate={{
+            width: [`${30 + i * 30}px`, `${80 + i * 35}px`],
+            height: [`${30 + i * 30}px`, `${80 + i * 35}px`],
+            opacity: [0.7 - i * 0.12, 0],
+          }}
+          transition={{
+            duration: 2.5,
+            delay: i * 0.5,
+            repeat: Infinity,
+            ease: "easeOut",
+          }}
+        />
+      ))}
+
+      {/* Static rings for depth */}
+      {[40, 80, 120].map((size, i) => (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            width: size,
+            height: size,
+            borderRadius: "50%",
+            border: "1px solid rgba(255,95,31,0.12)",
+          }}
+        />
+      ))}
+
+      {/* Center dot */}
+      <motion.div
+        style={{
+          width: 10,
+          height: 10,
+          borderRadius: "50%",
+          background: "var(--accent)",
+          position: "relative",
+          zIndex: 1,
+        }}
+        animate={{
+          scale: [1, 1.4, 1],
+          boxShadow: [
+            "0 0 0 0 rgba(255,95,31,0.4)",
+            "0 0 0 8px rgba(255,95,31,0)",
+            "0 0 0 0 rgba(255,95,31,0)",
+          ],
+        }}
+        transition={{ duration: 2, repeat: Infinity }}
+      />
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 12,
+          right: 14,
+          fontFamily: "var(--font-mono)",
+          fontSize: 9,
+          color: "var(--accent)",
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          opacity: 0.7,
+        }}
+      >
+        proximity detected
+      </div>
+    </div>
+  );
+}
+
+function EmotionVisual() {
+  /* 8×6 dot face grid — lights up to show different emotion patterns */
+  const cols = 11;
+  const rows = 7;
+
+  // "Face" landmark dots — eyes, nose, mouth curve
+  const face = new Set([13, 15, 37, 44, 46, 54, 55, 56, 57, 58, 59, 60]);
+  // "Contemplating" brow dots
+  const brow = new Set([2, 3, 4, 7, 8, 9]);
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        height: 150,
+        overflow: "hidden",
+        background: "rgba(255,95,31,0.03)",
+        borderBottom: "1px solid var(--border)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${cols}, 1fr)`,
+          gap: 8,
+          padding: "0 16px",
+          width: "100%",
+        }}
+      >
+        {Array.from({ length: cols * rows }, (_, i) => {
+          const isFace = face.has(i);
+          const isBrow = brow.has(i);
+          return (
+            <motion.div
+              key={i}
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
+                justifySelf: "center",
+              }}
+              animate={{
+                backgroundColor: isFace
+                  ? "var(--accent)"
+                  : isBrow
+                    ? "rgba(255,95,31,0.5)"
+                    : "rgba(237,230,214,0.1)",
+                scale: isFace ? 1.3 : 1,
+                opacity: isFace ? 1 : isBrow ? 0.6 : 0.2,
+              }}
+              transition={{ duration: 0.6, delay: i * 0.015, ease: "easeOut" }}
+            />
+          );
+        })}
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 10,
+          right: 14,
+          fontFamily: "var(--font-mono)",
+          fontSize: 9,
+          color: "var(--accent)",
+          letterSpacing: "0.18em",
+          textTransform: "uppercase",
+          opacity: 0.7,
+        }}
+      >
+        26 classes
+      </div>
+    </div>
+  );
+}
+
+/* ─── Hero headline ──────────────────────────────────────────── */
+
+function HeroHeadline() {
+  return (
+    <div
+      style={{
+        fontFamily: "var(--font-display)",
+        fontStyle: "italic",
+        fontSize: "clamp(3.6rem, 9vw, 9.5rem)",
+        letterSpacing: "-0.04em",
+        lineHeight: 0.92,
+      }}
+    >
+      {heroLines.map((line, i) => (
+        <div key={i} style={{ overflow: "hidden", display: "block" }}>
+          <motion.div
+            initial={{ y: "110%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{
+              duration: 0.9,
+              ease: [0.22, 1, 0.36, 1],
+              delay: 0.1 + i * 0.13,
+            }}
+            style={{ color: line.color, display: "block" }}
+          >
+            {line.text}
+          </motion.div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─── Reveal heading ─────────────────────────────────────────── */
+
+function RevealHeading({
+  children,
+  style = {},
+}: {
+  children: React.ReactNode;
+  style?: React.CSSProperties;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  return (
+    <div ref={ref} style={{ overflow: "hidden" }}>
+      <motion.div
+        initial={{ y: "105%", opacity: 0 }}
+        animate={inView ? { y: 0, opacity: 1 } : {}}
+        transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+        style={style}
+      >
+        {children}
+      </motion.div>
     </div>
   );
 }
 
 /* ─── Project card ───────────────────────────────────────────── */
 
-function ProjectCard({ project }: { project: Project }) {
-  return (
-    <motion.article
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative flex flex-col justify-between p-7 min-h-[300px] snap-start shrink-0 w-[80vw] md:w-auto"
-      style={{
-        background: "var(--surface)",
-        border: "1px solid var(--border)",
-        transition: "border-color 0.25s ease",
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = "var(--border-hover)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
-      }}
-    >
-      {/* Arrow — appears on hover */}
-      <motion.div
-        className="absolute top-6 right-6"
-        initial={{ opacity: 0, x: -4, y: 4 }}
-        whileHover={{ opacity: 1, x: 0, y: 0 }}
-        style={{ color: "var(--accent)" }}
-      >
-        <ArrowUpRight size={18} />
-      </motion.div>
+const cardVisuals = {
+  veris: VerisVisual,
+  sukku: SukkuVisual,
+  emotion: EmotionVisual,
+};
 
-      <div className="flex flex-col gap-4">
-        {/* Project name */}
-        <h3
-          className="display-md text-clamp-md leading-none"
-          style={{ color: "var(--fg)" }}
-        >
-          {project.name}
-        </h3>
-
-        {/* Tagline */}
-        <p
-          className="text-sm leading-relaxed max-w-xs"
-          style={{ color: "var(--fg-muted)", fontFamily: "var(--font-body)" }}
-        >
-          {project.tagline}
-        </p>
-      </div>
-
-      {/* Footer row */}
-      <div className="mt-8 flex flex-col gap-3">
-        {/* Status */}
-        {project.status === "live" ? (
-          <span className="status-live">{project.statusLabel}</span>
-        ) : (
-          <span
-            className="font-mono text-[10px] tracking-[0.14em] uppercase"
-            style={{ color: "var(--fg-subtle)" }}
-          >
-            {project.statusLabel}
-          </span>
-        )}
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-1.5">
-          {project.tags.map((tag) => (
-            <span key={tag} className="tag">
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-    </motion.article>
-  );
-}
-
-/* ─── Research question row ──────────────────────────────────── */
-
-function QuestionRow({ text, index }: { text: string; index: number }) {
+function ProjectCard({
+  project,
+  index,
+}: {
+  project: (typeof featuredProjects)[0];
+  index: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px 0px" });
+  const nameRef = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const { scramble, reset } = useScramble(project.name, 500);
+  const Visual = cardVisuals[project.visual];
 
   return (
     <motion.div
       ref={ref}
-      custom={index}
-      variants={fadeUpVariants}
-      initial="hidden"
-      animate={inView ? "visible" : "hidden"}
-      className="flex items-start gap-4 py-6"
-      style={{ borderBottom: "1px solid var(--border)" }}
+      initial={{ opacity: 0, y: 60 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1],
+        delay: index * 0.1,
+      }}
     >
-      <span
-        className="shrink-0 text-2xl md:text-3xl leading-tight"
-        style={{ color: "var(--fg)" }}
-      >
-        —
-      </span>
-      <p
-        className="text-xl md:text-2xl lg:text-3xl leading-snug"
-        style={{
-          color: "var(--fg-muted)",
-          fontFamily: "var(--font-body)",
-          maxWidth: "72ch",
-        }}
-      >
-        {text}
-      </p>
+      <Magnetic strength={0.08}>
+        <motion.article
+          whileHover={{ y: -8 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          onMouseEnter={() => scramble(nameRef.current)}
+          onMouseLeave={() => reset(nameRef.current)}
+          style={{
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* Visual header */}
+          <Visual />
+
+          {/* Text body */}
+          <div
+            style={{
+              padding: 24,
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
+              flex: 1,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span className="num-tag">{project.num}</span>
+              {project.status === "live" ? (
+                <span className="status-live">Active</span>
+              ) : (
+                <span className="tag">Research</span>
+              )}
+            </div>
+
+            <h3
+              style={{
+                fontFamily: "var(--font-display)",
+                fontStyle: "italic",
+                fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
+                color: "var(--fg)",
+                lineHeight: 0.95,
+                letterSpacing: "-0.03em",
+              }}
+            >
+              <span ref={nameRef}>{project.name}</span>
+            </h3>
+
+            <p
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: 14,
+                color: "var(--fg-muted)",
+                lineHeight: 1.65,
+                flex: 1,
+              }}
+            >
+              {project.desc}
+            </p>
+
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 5,
+                  marginBottom: 12,
+                }}
+              >
+                {project.tags.map((t) => (
+                  <span key={t} className="tag">
+                    {t}
+                  </span>
+                ))}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  color: "var(--accent)",
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 10,
+                    letterSpacing: "0.18em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  View project
+                </span>
+                <ArrowUpRight size={12} />
+              </div>
+            </div>
+          </div>
+        </motion.article>
+      </Magnetic>
     </motion.div>
   );
 }
 
-/* ─── Main page component ────────────────────────────────────── */
+/* ─── Research question ─────────────────────────────────────── */
+
+function QuestionRow({ text, index }: { text: string; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: -30 }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{
+        duration: 0.7,
+        ease: [0.22, 1, 0.36, 1],
+        delay: index * 0.1,
+      }}
+      style={{
+        display: "flex",
+        gap: 16,
+        padding: "28px 0",
+        borderBottom: "1px solid var(--border)",
+        alignItems: "flex-start",
+      }}
+    >
+      {/* Large question number */}
+      <span
+        style={{
+          fontFamily: "var(--font-display)",
+          fontStyle: "italic",
+          fontSize: "clamp(2.5rem, 4vw, 4rem)",
+          color: "var(--border-hover)",
+          lineHeight: 1,
+          flexShrink: 0,
+          minWidth: "2.5rem",
+          letterSpacing: "-0.04em",
+        }}
+      >
+        {String(index + 1).padStart(2, "0")}
+      </span>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 6,
+          paddingTop: 8,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "var(--accent)",
+            opacity: 0.7,
+          }}
+        >
+          Open question
+        </span>
+        <p
+          style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "clamp(1rem, 1.6vw, 1.3rem)",
+            color: "var(--fg-muted)",
+            lineHeight: 1.55,
+          }}
+        >
+          {text}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─── Stats ──────────────────────────────────────────────────── */
+
+function StatItem({
+  num,
+  label,
+  sub,
+  index,
+}: {
+  num: string;
+  label: string;
+  sub: string;
+  index: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1],
+        delay: index * 0.12,
+      }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 10,
+        padding: "0 0 0 0",
+      }}
+    >
+      {/* Thin accent bar above number */}
+      <motion.div
+        initial={{ width: 0 }}
+        animate={inView ? { width: 40 } : {}}
+        transition={{
+          duration: 0.6,
+          ease: [0.22, 1, 0.36, 1],
+          delay: index * 0.12 + 0.3,
+        }}
+        style={{ height: 2, background: "var(--accent)", borderRadius: 1 }}
+      />
+
+      <span
+        style={{
+          fontFamily: "var(--font-display)",
+          fontStyle: "italic",
+          fontSize: "clamp(4rem, 8vw, 8rem)",
+          color: "var(--fg)",
+          lineHeight: 0.85,
+          letterSpacing: "-0.04em",
+        }}
+      >
+        {num}
+      </span>
+      <div>
+        <p
+          style={{
+            fontFamily: "var(--font-body)",
+            fontSize: 15,
+            color: "var(--fg)",
+            lineHeight: 1.4,
+            marginBottom: 4,
+          }}
+        >
+          {label}
+        </p>
+        <p
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+            color: "var(--fg-subtle)",
+          }}
+        >
+          {sub}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─── Page ──────────────────────────────────────────────────── */
 
 export default function LandingPage() {
-  /* Parallax for hero ember glow */
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const glowY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const orbY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.97]);
 
-  /* Stats section ref */
-  const statsRef = useRef<HTMLDivElement>(null);
-  const statsInView = useInView(statsRef, { once: true, margin: "-100px 0px" });
+  const manifestoRef = useRef<HTMLElement>(null);
+  const manifestoInView = useInView(manifestoRef, {
+    once: true,
+    margin: "-100px",
+  });
 
-  /* Manifesto ref */
-  const manifestoRef = useRef<HTMLDivElement>(null);
-  const manifestoInView = useInView(manifestoRef, { once: true, margin: "-100px 0px" });
+  const pad = "clamp(1.5rem, 4vw, 2.5rem)";
 
   return (
-    <div className="grain" style={{ background: "var(--bg)" }}>
+    <div
+      className="grain"
+      style={{
+        background: "var(--bg)",
+        color: "var(--fg)",
+        overflowX: "hidden",
+      }}
+    >
       <Navbar />
 
-      {/* ── 1. HERO ───────────────────────────────────────────── */}
-      <section
+      {/* ── HERO ──────────────────────────────────────────────── */}
+      <motion.section
         ref={heroRef}
-        className="relative flex flex-col justify-center min-h-screen overflow-hidden px-6 md:px-10"
-        style={{ paddingTop: "7rem", paddingBottom: "5rem" }}
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          position: "relative",
+          overflow: "hidden",
+          padding: `7rem ${pad} 5rem`,
+          scale: heroScale,
+        }}
       >
-        {/* Ember radial glow — CSS only */}
+        {/* Dot grid background */}
+        <HeroDotGrid />
+
+        {/* Ember orbs */}
         <motion.div
-          aria-hidden
           style={{
+            y: orbY,
             position: "absolute",
-            top: "38%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            y: glowY,
-            width: "min(860px, 110vw)",
-            height: "min(860px, 110vw)",
+            top: "-5%",
+            right: "-15%",
+            width: "min(900px, 120vw)",
+            height: "min(900px, 120vw)",
             borderRadius: "50%",
             background:
-              "radial-gradient(ellipse at center, rgba(255,95,31,0.13) 0%, rgba(255,95,31,0.04) 45%, transparent 72%)",
+              "radial-gradient(ellipse, rgba(255,95,31,0.12) 0%, rgba(255,95,31,0.04) 45%, transparent 70%)",
+            filter: "blur(70px)",
             pointerEvents: "none",
-            zIndex: 0,
           }}
         />
 
+        {/* Content */}
         <div
-          className="relative z-10 max-w-7xl mx-auto w-full"
-          style={{ maxWidth: "1280px" }}
+          style={{
+            position: "relative",
+            zIndex: 1,
+            maxWidth: 1280,
+            width: "100%",
+            margin: "0 auto",
+          }}
         >
-          {/* Section label */}
-          <div className="mb-8 fade-up fade-up-d1">
-            <span className="label">Portfolio — 2025</span>
+          {/* Live signal row */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 20,
+              marginBottom: 32,
+            }}
+          >
+            <span className="status-live" style={{ fontSize: 10 }}>
+              Building
+            </span>
+            <div
+              style={{ height: 1, width: 60, background: "var(--border)" }}
+            />
+            <span className="label" style={{ color: "var(--fg-subtle)" }}>
+              Tunai
+            </span>
+          </motion.div>
+
+          <div style={{ marginBottom: 36 }}>
+            <HeroHeadline />
           </div>
 
-          {/* Headline — word-by-word stagger */}
-          <h1 className="display-xl text-clamp-hero mb-8" style={{ color: "var(--fg)" }}>
-            <span className="block">
-              <AnimatedWords text="I don't just" baseDelay={0} />
-            </span>
-            <span className="block">
-              <AnimatedWords text="build things." baseDelay={3} />
-            </span>
-            <span
-              className="block mt-1"
-              style={{ color: "var(--fg-muted)" }}
-            >
-              <AnimatedWords text="I imagine what" baseDelay={5} />
-            </span>
-            <span
-              className="block"
-              style={{ color: "var(--fg-muted)" }}
-            >
-              <AnimatedWords text="they could mean." baseDelay={7} />
-            </span>
-          </h1>
-
-          {/* Intro line */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="text-base md:text-lg mb-12"
+            transition={{
+              duration: 0.7,
+              ease: [0.22, 1, 0.36, 1],
+              delay: 0.72,
+            }}
             style={{
-              color: "var(--fg-muted)",
               fontFamily: "var(--font-body)",
-              maxWidth: "56ch",
+              fontSize: "clamp(1rem, 1.4vw, 1.15rem)",
+              color: "var(--fg-muted)",
+              maxWidth: "44ch",
+              lineHeight: 1.75,
+              marginBottom: 44,
             }}
           >
-            Umyal Dixit — CS student, AI researcher, system builder.
+            CS student from Gurugram building at the intersection of AI and
+            human emotion. 10+ hackathons. 5 active systems. One direction.
           </motion.p>
 
-          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.05, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center gap-4 flex-wrap"
+            transition={{
+              duration: 0.7,
+              ease: [0.22, 1, 0.36, 1],
+              delay: 0.88,
+            }}
+            style={{ display: "flex", gap: 16, flexWrap: "wrap" }}
           >
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-mono tracking-widest uppercase transition-all duration-200"
-              style={{
-                background: "var(--accent)",
-                color: "#0A0A0A",
-                fontWeight: 500,
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "#ff7a45";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "var(--accent)";
-              }}
-            >
-              View Work
-              <ArrowUpRight size={14} />
-            </Link>
-
-            <Link
-              href="/about"
-              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-mono tracking-widest uppercase transition-all duration-200"
-              style={{
-                border: "1px solid var(--border)",
-                color: "var(--fg-muted)",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = "var(--border-hover)";
-                el.style.color = "var(--fg)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.borderColor = "var(--border)";
-                el.style.color = "var(--fg-muted)";
-              }}
-            >
-              About me
-            </Link>
+            <Magnetic strength={0.25}>
+              <Link href="/projects" className="btn-primary">
+                <span>View Work</span>
+                <ArrowUpRight size={14} />
+              </Link>
+            </Magnetic>
+            <Magnetic strength={0.25}>
+              <Link href="/about" className="btn-outline">
+                <span>About me</span>
+              </Link>
+            </Magnetic>
           </motion.div>
         </div>
 
@@ -394,219 +908,295 @@ export default function LandingPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 0.8 }}
-          className="absolute bottom-10 left-6 md:left-10 flex items-center gap-3"
+          transition={{ duration: 0.8, delay: 1.2 }}
+          style={{
+            position: "absolute",
+            bottom: 40,
+            left: pad,
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+          }}
         >
           <div
-            className="w-px h-12 origin-top"
-            style={{ background: "var(--fg-subtle)" }}
+            style={{ width: 1, height: 44, background: "var(--fg-subtle)" }}
           />
-          <span className="label" style={{ writingMode: "vertical-rl" }}>
+          <span
+            className="label"
+            style={{ writingMode: "vertical-rl", color: "var(--fg-subtle)" }}
+          >
             Scroll
           </span>
         </motion.div>
-      </section>
+      </motion.section>
 
-      {/* ── 2. IDENTITY MARQUEE ──────────────────────────────────── */}
+      {/* ── MARQUEE ───────────────────────────────────────────── */}
       <div
-        className="marquee-outer w-full py-4"
+        className="marquee-outer"
         style={{
-          background: "var(--surface)",
           borderTop: "1px solid var(--border)",
           borderBottom: "1px solid var(--border)",
+          background: "var(--surface)",
+          padding: "14px 0",
         }}
       >
         <div className="marquee-track">
-          {/* Render twice for seamless loop */}
-          {[...marqueeItems, ...marqueeItems].map((item, i) => (
-            <span
-              key={i}
-              className="inline-flex items-center gap-4 px-6"
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "11px",
-                letterSpacing: "0.16em",
-                textTransform: "uppercase",
-                color: "var(--fg-muted)",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {item}
-              <span className="dot-accent shrink-0" />
-            </span>
-          ))}
+          {[...marqueeItems, ...marqueeItems, ...marqueeItems].map(
+            (item, i) => (
+              <span
+                key={i}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 14,
+                  padding: "0 22px",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 11,
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  color: "var(--fg-muted)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {item}
+                <span
+                  style={{
+                    width: 4,
+                    height: 4,
+                    borderRadius: "50%",
+                    background: "var(--accent)",
+                    flexShrink: 0,
+                  }}
+                />
+              </span>
+            ),
+          )}
         </div>
       </div>
 
-      {/* ── 3. WHAT I'M BUILDING ────────────────────────────────── */}
+      {/* ── CURRENTLY BUILDING ────────────────────────────────── */}
       <section
-        className="px-6 md:px-10 py-24 max-w-7xl mx-auto w-full"
-        style={{ maxWidth: "1280px" }}
+        style={{
+          padding: `clamp(5rem,10vw,8rem) ${pad}`,
+          maxWidth: 1280,
+          margin: "0 auto",
+        }}
       >
-        <SectionLabel num="01">Currently Building</SectionLabel>
-
-        <h2
-          className="display-md text-clamp-lg mb-16"
-          style={{ color: "var(--fg)" }}
+        <p
+          className="label"
+          style={{ color: "var(--fg-subtle)", marginBottom: 20 }}
         >
-          Systems at the edge of{" "}
-          <br className="hidden md:block" />
-          what&apos;s possible
-        </h2>
+          01 — Currently Building
+        </p>
+        <RevealHeading
+          style={{
+            fontFamily: "var(--font-display)",
+            fontStyle: "italic",
+            fontSize: "clamp(2rem, 4vw, 3.5rem)",
+            color: "var(--fg)",
+            lineHeight: 0.92,
+            letterSpacing: "-0.03em",
+            marginBottom: "clamp(3rem,6vw,5rem)",
+            maxWidth: "20ch",
+          }}
+        >
+          Systems at the edge of what&apos;s possible
+        </RevealHeading>
 
-        {/* Mobile: horizontal scroll / Desktop: 3-col grid */}
         <div
-          className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto snap-x snap-mandatory pb-4 md:overflow-visible md:pb-0"
-          style={{ scrollbarWidth: "none" }}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: 2,
+          }}
         >
-          {projects.map((project) => (
-            <ProjectCard key={project.name} project={project} />
+          {featuredProjects.map((p, i) => (
+            <Link
+              key={p.name}
+              href="/projects"
+              style={{ textDecoration: "none" }}
+            >
+              <ProjectCard project={p} index={i} />
+            </Link>
           ))}
         </div>
       </section>
 
-      {/* ── 4. RESEARCH QUESTIONS ────────────────────────────────── */}
+      {/* ── RESEARCH QUESTIONS ────────────────────────────────── */}
       <section
-        className="px-6 md:px-10 py-24 w-full"
-        style={{ background: "var(--surface-2)" }}
+        style={{
+          background: "var(--surface-2)",
+          padding: `clamp(5rem,10vw,8rem) ${pad}`,
+        }}
       >
-        <div className="max-w-7xl mx-auto" style={{ maxWidth: "1280px" }}>
-          <SectionLabel num="02">The questions I'm trying to answer</SectionLabel>
-
-          <div className="hr mb-8" />
-
-          {questions.map((q, i) => (
-            <QuestionRow key={i} text={q} index={i} />
-          ))}
-        </div>
-      </section>
-
-      {/* ── 5. SELECTED WINS ─────────────────────────────────────── */}
-      <section
-        className="px-6 md:px-10 py-24 max-w-7xl mx-auto w-full"
-        style={{ maxWidth: "1280px" }}
-      >
-        <SectionLabel num="03">By the numbers</SectionLabel>
-
-        <div ref={statsRef}>
-          <div className="hr mb-16" />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-0 md:divide-x md:divide-[var(--border)]">
-            {[
-              { num: "10+", label: "Hackathons won" },
-              { num: "5", label: "Systems in production / active development" },
-              { num: "3", label: "Research domains — AI · Hardware · Web3" },
-            ].map((stat, i) => (
-              <motion.div
-                key={i}
-                custom={i}
-                variants={fadeUpVariants}
-                initial="hidden"
-                animate={statsInView ? "visible" : "hidden"}
-                className="flex flex-col gap-2 md:px-12 first:pl-0 last:pr-0"
-              >
-                <span
-                  className="display-xl"
-                  style={{
-                    color: "var(--fg)",
-                    fontSize: "clamp(4rem, 8vw, 8rem)",
-                  }}
-                >
-                  {stat.num}
-                </span>
-                <span
-                  className="text-sm leading-relaxed"
-                  style={{
-                    color: "var(--fg-muted)",
-                    fontFamily: "var(--font-body)",
-                    maxWidth: "24ch",
-                  }}
-                >
-                  {stat.label}
-                </span>
-              </motion.div>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <p
+            className="label"
+            style={{ color: "var(--fg-subtle)", marginBottom: 20 }}
+          >
+            02 — Open Questions
+          </p>
+          <div style={{ borderTop: "1px solid var(--border)" }}>
+            {researchQs.map((q, i) => (
+              <QuestionRow key={i} text={q} index={i} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── 6. MANIFESTO ─────────────────────────────────────────── */}
+      {/* ── STATS ─────────────────────────────────────────────── */}
       <section
-        className="px-6 md:px-10 py-32 w-full relative overflow-hidden"
-        style={{ background: "var(--surface)" }}
+        style={{
+          padding: `clamp(5rem,10vw,8rem) ${pad}`,
+          borderBottom: "1px solid var(--border)",
+        }}
       >
-        {/* Large ambient background text */}
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <p
+            className="label"
+            style={{
+              color: "var(--fg-subtle)",
+              marginBottom: "clamp(3rem,5vw,4rem)",
+            }}
+          >
+            03 — By the numbers
+          </p>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+              gap: "clamp(3rem,6vw,5rem)",
+            }}
+          >
+            {[
+              {
+                num: "10+",
+                label: "Hackathons won",
+                sub: "across India — 2023–2025",
+              },
+              {
+                num: "5",
+                label: "Systems building",
+                sub: "in active development right now",
+              },
+              {
+                num: "3",
+                label: "Research domains",
+                sub: "AI · Hardware · Web3",
+              },
+            ].map((s, i) => (
+              <StatItem key={i} {...s} index={i} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── MANIFESTO ─────────────────────────────────────────── */}
+      <motion.section
+        ref={manifestoRef}
+        style={{
+          padding: `clamp(6rem,12vw,11rem) ${pad}`,
+          background: "var(--surface)",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
         <div
           aria-hidden
-          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
-          style={{ zIndex: 0 }}
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            overflow: "hidden",
+            pointerEvents: "none",
+            paddingRight: pad,
+          }}
         >
           <span
-            className="display-xl whitespace-nowrap"
             style={{
-              fontSize: "clamp(5rem, 18vw, 18rem)",
+              fontFamily: "var(--font-display)",
+              fontStyle: "italic",
+              fontSize: "clamp(6rem,22vw,22rem)",
               color: "transparent",
               WebkitTextStroke: "1px rgba(237,230,214,0.04)",
               letterSpacing: "-0.04em",
+              whiteSpace: "nowrap",
+              userSelect: "none",
             }}
           >
-            EXECUTE
+            Execute
           </span>
         </div>
 
         <div
-          ref={manifestoRef}
-          className="relative z-10 max-w-7xl mx-auto"
-          style={{ maxWidth: "1280px" }}
+          style={{
+            maxWidth: 1280,
+            margin: "0 auto",
+            position: "relative",
+            zIndex: 1,
+          }}
         >
-          <SectionLabel num="04">Manifesto</SectionLabel>
-
-          <motion.blockquote
-            custom={0}
-            variants={fadeUpVariants}
-            initial="hidden"
-            animate={manifestoInView ? "visible" : "hidden"}
-            className="display-xl text-clamp-lg mb-10"
-            style={{ color: "var(--fg)" }}
+          <p
+            className="label"
+            style={{ color: "var(--fg-subtle)", marginBottom: 32 }}
           >
-            &ldquo;I&rsquo;m not exploring.
-            <br />
-            I&rsquo;m executing.&rdquo;
-          </motion.blockquote>
+            04 — Manifesto
+          </p>
 
-          <motion.p
-            custom={2}
-            variants={fadeUpVariants}
-            initial="hidden"
-            animate={manifestoInView ? "visible" : "hidden"}
-            className="text-base md:text-lg mb-12 leading-relaxed"
+          <RevealHeading
             style={{
-              color: "var(--fg-muted)",
-              fontFamily: "var(--font-body)",
-              maxWidth: "54ch",
+              fontFamily: "var(--font-display)",
+              fontStyle: "italic",
+              fontSize: "clamp(3.5rem,8vw,8rem)",
+              color: "var(--fg)",
+              lineHeight: 0.88,
+              letterSpacing: "-0.04em",
+              marginBottom: 40,
             }}
           >
-            Building Veris, Sukku, and a research direction I&apos;ve already chosen.
-            The gap between my vision and my execution is the engine.
+            Not exploring.
+            <br />
+            <span style={{ color: "var(--accent)" }}>Executing.</span>
+          </RevealHeading>
+
+          <motion.p
+            initial={{ opacity: 0, y: 24 }}
+            animate={manifestoInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "clamp(1rem,1.4vw,1.1rem)",
+              color: "var(--fg-muted)",
+              maxWidth: "52ch",
+              lineHeight: 1.8,
+              marginBottom: 40,
+            }}
+          >
+            Building Veris, Sukku, and a research direction I&apos;ve already
+            chosen. The gap between my vision and my execution isn&apos;t a
+            weakness — it&apos;s the engine.
           </motion.p>
 
           <motion.div
-            custom={4}
-            variants={fadeUpVariants}
-            initial="hidden"
-            animate={manifestoInView ? "visible" : "hidden"}
+            initial={{ opacity: 0, y: 16 }}
+            animate={manifestoInView ? { opacity: 1, y: 0 } : {}}
+            transition={{
+              duration: 0.7,
+              ease: [0.22, 1, 0.36, 1],
+              delay: 0.35,
+            }}
           >
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 link-underline font-mono text-sm tracking-widest uppercase"
-              style={{ color: "var(--fg)" }}
-            >
-              See all projects
-              <ArrowUpRight size={14} />
-            </Link>
+            <Magnetic strength={0.2}>
+              <Link href="/projects" className="btn-primary">
+                <span>See all projects</span>
+                <ArrowUpRight size={14} />
+              </Link>
+            </Magnetic>
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       <Footer />
     </div>

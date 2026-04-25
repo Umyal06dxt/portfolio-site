@@ -24,9 +24,10 @@ const capabilities = [
 const techStack = [
   "JavaScript", "TypeScript", "Python", "C/C++", "React",
   "Next.js", "Node.js", "PyTorch", "TensorFlow", "OpenCV",
-  "Docker", "Firebase", "MongoDB", "Arduino", "Raspberry Pi", "Figma", "Three.js",
+  "Docker", "Firebase", "MongoDB", "Arduino", "Raspberry Pi", "Figma",
 ];
 
+/* ─── Page title ─────────────────────────────────────────────── */
 function PageTitle() {
   return (
     <div style={{ overflow: "hidden" }}>
@@ -49,27 +50,15 @@ function PageTitle() {
   );
 }
 
+/* ─── Animated dot grid (face heatmap) ─────────────────────── */
 function DotGrid() {
   const containerRef = useRef<HTMLDivElement>(null);
   const inView = useInView(containerRef, { once: true, margin: "-60px" });
-
-  const rows = 10;
-  const cols = 12;
-  const total = rows * cols;
+  const rows = 10, cols = 12, total = rows * cols;
   const lit = new Set([13, 14, 17, 18, 25, 26, 29, 30, 37, 38, 43, 50, 57, 64, 74, 75, 76, 77, 78]);
-
   return (
     <div ref={containerRef}>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${cols}, 1fr)`,
-          gap: 10,
-          padding: "28px",
-          background: "var(--surface)",
-          border: "1px solid var(--border)",
-        }}
-      >
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 10, padding: "24px", background: "var(--surface)", border: "1px solid var(--border)" }}>
         {Array.from({ length: total }, (_, i) => {
           const isLit = lit.has(i);
           return (
@@ -87,13 +76,89 @@ function DotGrid() {
           );
         })}
       </div>
-      <p className="label" style={{ marginTop: 12, textAlign: "center", color: "var(--fg-subtle)" }}>
-        26-class emotion space
-      </p>
+      <p className="label" style={{ marginTop: 10, textAlign: "center", color: "var(--fg-subtle)" }}>26-class emotion space</p>
     </div>
   );
 }
 
+/* ─── Stat card ──────────────────────────────────────────────── */
+function StatCard({ value, label, delay = 0 }: { value: string; label: string; delay?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay }}
+      style={{
+        padding: "clamp(1.2rem, 2.5vw, 1.8rem) clamp(1rem, 2vw, 1.5rem)",
+        border: "1px solid var(--border)",
+        background: "var(--surface)",
+        display: "flex",
+        flexDirection: "column",
+        gap: 8,
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <motion.div
+        style={{ position: "absolute", top: 0, left: 0, width: 2, height: "100%", background: "var(--accent)", transformOrigin: "top" }}
+        initial={{ scaleY: 0 }}
+        animate={inView ? { scaleY: 1 } : {}}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: delay + 0.2 }}
+      />
+      <span
+        style={{
+          fontFamily: "var(--font-display)",
+          fontStyle: "italic",
+          fontSize: "clamp(2.2rem, 4vw, 3.5rem)",
+          color: "var(--fg)",
+          lineHeight: 0.9,
+          letterSpacing: "-0.03em",
+        }}
+      >
+        {value}
+      </span>
+      <span className="label" style={{ color: "var(--fg-subtle)" }}>{label}</span>
+    </motion.div>
+  );
+}
+
+/* ─── Timeline item ──────────────────────────────────────────── */
+function TimelineItem({ year, title, detail, index }: { year: string; title: string; detail: string; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, x: -20 }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: index * 0.08 }}
+      style={{ display: "flex", gap: 20, alignItems: "flex-start" }}
+    >
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 }}>
+        <motion.div
+          style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent)", marginTop: 6 }}
+          animate={inView ? { scale: [0, 1.3, 1] } : {}}
+          transition={{ duration: 0.5, delay: index * 0.08 + 0.2 }}
+        />
+        <div style={{ width: 1, flexGrow: 1, background: "var(--border)", marginTop: 6, minHeight: 40 }} />
+      </div>
+      <div style={{ paddingBottom: 28 }}>
+        <span className="label" style={{ color: "var(--accent)", marginBottom: 4, display: "block" }}>{year}</span>
+        <p style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: "clamp(1rem, 1.8vw, 1.4rem)", color: "var(--fg)", lineHeight: 1.1, marginBottom: 6 }}>
+          {title}
+        </p>
+        <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "var(--fg-muted)", lineHeight: 1.65, maxWidth: "46ch" }}>
+          {detail}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─── Reveal heading ─────────────────────────────────────────── */
 function RevealHeading({ children, style = {} }: { children: React.ReactNode; style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -111,6 +176,7 @@ function RevealHeading({ children, style = {} }: { children: React.ReactNode; st
   );
 }
 
+/* ─── Question row ───────────────────────────────────────────── */
 function QuestionRow({ text, index }: { text: string; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
@@ -132,18 +198,26 @@ function QuestionRow({ text, index }: { text: string; index: number }) {
   );
 }
 
+/* ─── Capability row ─────────────────────────────────────────── */
 function CapRow({ cap, index }: { cap: typeof capabilities[0]; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
+  const icons = ["◈", "◎", "◉", "◐"];
   return (
     <motion.div
       ref={ref}
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: index * 0.09 }}
-      style={{ display: "flex", gap: 18, padding: "28px 0", borderBottom: "1px solid var(--border)", alignItems: "flex-start" }}
+      style={{ display: "flex", gap: 20, padding: "28px 0", borderBottom: "1px solid var(--border)", alignItems: "flex-start" }}
     >
-      <span className="dot-accent" style={{ flexShrink: 0, marginTop: 10 }} />
+      <motion.span
+        style={{ fontFamily: "var(--font-mono)", fontSize: 18, color: "var(--accent)", flexShrink: 0, lineHeight: 1, paddingTop: 6, opacity: 0.7 }}
+        animate={inView ? { opacity: [0, 0.7] } : {}}
+        transition={{ duration: 0.5, delay: index * 0.09 + 0.3 }}
+      >
+        {icons[index]}
+      </motion.span>
       <div>
         <RevealHeading
           style={{
@@ -165,6 +239,7 @@ function CapRow({ cap, index }: { cap: typeof capabilities[0]; index: number }) 
   );
 }
 
+/* ─── Main ──────────────────────────────────────────────────── */
 export default function AboutPage() {
   const visionRef = useRef<HTMLElement>(null);
   const visionInView = useInView(visionRef, { once: true, margin: "-80px" });
@@ -174,10 +249,25 @@ export default function AboutPage() {
   const pad = "clamp(1.5rem, 4vw, 2.5rem)";
   const secPad = `clamp(5rem, 10vw, 8rem) ${pad}`;
 
+  const stats = [
+    { value: "10+", label: "Hackathons won" },
+    { value: "5", label: "Projects built" },
+    { value: "3+", label: "Years building" },
+    { value: "26", label: "Emotion classes" },
+  ];
+
+  const timeline = [
+    { year: "2024", title: "First hardware project ships", detail: "Built a sun-tracking floating solar panel from scratch — C++, Arduino, servos, sensors. Realized hardware + software together is where I want to live." },
+    { year: "2024", title: "Wound sensor deployed", detail: "Computer vision system for medical wound analysis. First time I built something with genuine diagnostic stakes." },
+    { year: "2024 →", title: "Emotion AI research begins", detail: "26-class facial emotion classification model. Most ML work stays at 6 basic emotions. I wanted to go deeper, to the hard ones humans struggle to name." },
+    { year: "2025 →", title: "Veris + Sukku in parallel", detail: "Deepfake detection at the hardware layer. A proactive AI companion that notices. Two of the most ambitious things I've attempted — running simultaneously." },
+  ];
+
   return (
     <div className="grain" style={{ background: "var(--bg)", color: "var(--fg)" }}>
       <Navbar />
 
+      {/* Header */}
       <header style={{ padding: `clamp(8rem, 15vw, 12rem) ${pad} clamp(3rem, 6vw, 5rem)`, maxWidth: 1280, margin: "0 auto" }}>
         <motion.p
           className="label"
@@ -197,6 +287,16 @@ export default function AboutPage() {
         />
       </header>
 
+      {/* Stats grid */}
+      <section style={{ padding: `0 ${pad} clamp(3rem, 6vw, 5rem)`, maxWidth: 1280, margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 1, background: "var(--border)" }}>
+          {stats.map((s, i) => (
+            <StatCard key={s.label} value={s.value} label={s.label} delay={i * 0.07} />
+          ))}
+        </div>
+      </section>
+
+      {/* Intro — 2 col */}
       <section style={{ padding: `clamp(3rem, 6vw, 5rem) ${pad}`, maxWidth: 1280, margin: "0 auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "clamp(3rem, 6vw, 5rem)", alignItems: "start" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
@@ -217,6 +317,7 @@ export default function AboutPage() {
             ))}
           </div>
 
+          {/* Dot grid — desktop only */}
           <motion.div
             initial={{ opacity: 0, scale: 0.94 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -229,6 +330,19 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Timeline */}
+      <section style={{ background: "var(--surface-2)", padding: secPad }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <p className="label" style={{ color: "var(--fg-subtle)", marginBottom: 36 }}>Timeline</p>
+          <div style={{ maxWidth: 680 }}>
+            {timeline.map((item, i) => (
+              <TimelineItem key={i} {...item} index={i} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Research questions */}
       <section style={{ padding: secPad, maxWidth: 1280, margin: "0 auto" }}>
         <p className="label" style={{ color: "var(--fg-subtle)", marginBottom: 24 }}>The Questions I&apos;m Trying To Answer</p>
         <div style={{ borderTop: "1px solid var(--border)" }}>
@@ -236,6 +350,7 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Capabilities */}
       <section style={{ background: "var(--surface-2)", padding: secPad }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <p className="label" style={{ color: "var(--fg-subtle)", marginBottom: 24 }}>What I Can Build</p>
@@ -243,6 +358,7 @@ export default function AboutPage() {
             {capabilities.map((cap, i) => <CapRow key={cap.title} cap={cap} index={i} />)}
           </div>
 
+          {/* Tech tags */}
           <div style={{ marginTop: "clamp(3rem, 5vw, 4rem)" }}>
             <p className="label" style={{ color: "var(--fg-subtle)", marginBottom: 16 }}>Stack</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
@@ -261,20 +377,14 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Vision */}
       <motion.section
         ref={visionRef}
         style={{ padding: `clamp(6rem, 12vw, 11rem) ${pad}`, maxWidth: 1280, margin: "0 auto", position: "relative", overflow: "hidden" }}
       >
         <div
           aria-hidden
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            overflow: "hidden",
-            pointerEvents: "none",
-          }}
+          style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", overflow: "hidden", pointerEvents: "none" }}
         >
           <span style={{
             fontFamily: "var(--font-display)",
@@ -328,6 +438,7 @@ export default function AboutPage() {
         </div>
       </motion.section>
 
+      {/* Contact */}
       <motion.section
         ref={contactRef}
         style={{ padding: secPad, background: "var(--surface)", borderTop: "1px solid var(--border)" }}
@@ -369,6 +480,7 @@ export default function AboutPage() {
                       href={link.href}
                       target={link.href.startsWith("http") ? "_blank" : undefined}
                       rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+                      className="link-underline"
                       style={{
                         display: "inline-flex",
                         alignItems: "center",

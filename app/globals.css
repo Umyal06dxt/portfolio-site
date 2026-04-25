@@ -452,3 +452,9 @@ a, button { cursor: none; }
 
 /* ─── Marquee pause on hover ──────────────────────────────── */
 .marquee-outer:hover .marquee-track { animation-play-state: paused; }
+
+/* ─── Responsive grid helpers ─────────────────────────────── */
+@media (max-width: 640px) {
+  .grid-cols-responsive { grid-template-columns: 1fr !important; }
+  .stats-grid-responsive { grid-template-columns: repeat(2, 1fr) !important; }
+}

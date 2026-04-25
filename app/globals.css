@@ -34,7 +34,10 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: none; /* use custom cursor */
 }
+
+a, button { cursor: none; }
 
 /* Custom selection */
 ::selection {
@@ -296,3 +299,156 @@ body {
 /* ─── Line clamp ───────────────────────────────────────────── */
 .clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* ─── Clip-path reveal utility ────────────────────────────── */
+.clip-reveal {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.clip-reveal.revealed {
+  clip-path: inset(0 0 0% 0);
+}
+
+/* ─── GSAP char split wrapper ─────────────────────────────── */
+.char-wrap { overflow: hidden; display: inline-block; }
+.char      { display: inline-block; will-change: transform; }
+
+/* ─── Magnetic button base ────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: var(--accent);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  transition: gap 0.3s ease;
+}
+
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.15);
+  transform: translateX(-101%);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-primary:hover::before { transform: translateX(0); }
+.btn-primary:hover { gap: 14px; }
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 28px;
+  background: transparent;
+  color: var(--fg-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease, border-color 0.3s ease, gap 0.3s ease;
+}
+
+.btn-outline::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--fg);
+  transform: translateY(101%);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.btn-outline:hover {
+  color: var(--bg);
+  border-color: var(--fg);
+  gap: 14px;
+}
+
+.btn-outline:hover::before { transform: translateY(0); }
+.btn-outline span { position: relative; z-index: 1; }
+
+/* ─── Project row hover line ──────────────────────────────── */
+.project-row {
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.project-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-row:hover::before { transform: scaleY(1); }
+.project-row:hover { background: var(--surface); }
+
+/* ─── Glow text ───────────────────────────────────────────── */
+.text-glow {
+  text-shadow: 0 0 80px rgba(255, 95, 31, 0.35), 0 0 160px rgba(255, 95, 31, 0.15);
+}
+
+/* ─── Underline slide ─────────────────────────────────────── */
+.nav-link {
+  position: relative;
+  display: inline-block;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--fg);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-link:hover::after, .nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ─── Section intro anim ──────────────────────────────────── */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Ambient ember orb ───────────────────────────────────── */
+.ember-orb {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255,95,31,0.18) 0%, rgba(255,95,31,0.06) 45%, transparent 72%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+/* ─── Scramble text ───────────────────────────────────────── */
+.scramble {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-mono);
+}
+
+/* ─── Marquee pause on hover ──────────────────────────────── */
+.marquee-outer:hover .marquee-track { animation-play-state: paused; }

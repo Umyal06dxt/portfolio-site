@@ -1,413 +1,614 @@
 "use client";
 
-import AvatarScene from "@/components/avatar-scene";
-import HeroScene from "@/components/hero-scene";
 import Navbar from "@/components/navbar";
-import { BentoGridItem } from "@/components/ui/bento-grid";
-import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { ArrowUpRight, Brain, Cpu, Linkedin, Mail, MoveRight, Palette, Radio, Terminal } from "lucide-react";
+import Footer from "@/components/footer";
+import {
+  motion,
+  useInView,
+  useScroll,
+  useTransform,
+  Variants,
+} from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
-interface Item {
-  id: number;
-  title: string;
-  description: string;
-  header: React.ReactNode;
-  icon?: React.ReactNode;
-  className?: string;
-  fullDescription?: string;
-  roles?: string;
-  stack?: string;
-  isProfile?: boolean;
-  isContact?: boolean;
-  isSkills?: boolean;
+/* ─── Data ──────────────────────────────────────────────────── */
+
+const marqueeItems = [
+  "10× Hackathon Winner",
+  "AI Researcher",
+  "Gurugram, India",
+  "CS Student",
+  "Hardware Builder",
+  "Public Speaker",
+  "Late-night Builder",
+  "System Thinker",
+];
+
+interface Project {
+  name: string;
+  status: "live" | "research";
+  statusLabel: string;
+  tagline: string;
+  tags: string[];
 }
 
-const items: Item[] = [
-  // --- Left Column ---
+const projects: Project[] = [
   {
-    id: 5,
-    title: "",
-    description: "",
-    header: (
-        <div className="flex flex-col justify-between p-6 h-full w-full relative group/connect bg-[#050505]">
-             {/* Tech Grid Overlay */}
-            <div className="absolute inset-0 z-0 opacity-20 pointer-events-none"
-                 style={{ backgroundImage: "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
-
-            <div className="flex justify-between items-start z-10">
-                 <Radio className="w-5 h-5 text-[#E85002] animate-pulse" />
-                 <span className="font-mono text-[10px] text-white/40">NET.STATUS: ONLINE</span>
-            </div>
-
-            <div className="flex flex-col gap-3 relative z-10 mt-4">
-                <a href="https://linkedin.com" target="_blank" className="flex items-center justify-between p-3 border border-white/10 hover:bg-[#E85002] hover:text-black hover:border-[#E85002] transition-all group/link">
-                   <div className="flex items-center gap-3">
-                       <Linkedin className="w-4 h-4" />
-                       <span className="font-mono text-xs uppercase tracking-widest">LinkedIn</span>
-                   </div>
-                   <MoveRight className="w-4 h-4 opacity-0 group-hover/link:opacity-100 -translate-x-2 group-hover/link:translate-x-0 transition-all"/>
-                </a>
-                <a href="https://x.com" target="_blank" className="flex items-center justify-between p-3 border border-white/10 hover:bg-[#E85002] hover:text-black hover:border-[#E85002] transition-all group/link">
-                   <div className="flex items-center gap-3">
-                       <span className="font-bold text-lg leading-none">𝕏</span>
-                       <span className="font-mono text-xs uppercase tracking-widest">Twitter</span>
-                   </div>
-                   <MoveRight className="w-4 h-4 opacity-0 group-hover/link:opacity-100 -translate-x-2 group-hover/link:translate-x-0 transition-all"/>
-                </a>
-                 <a href="mailto:hello@umyal.com" className="flex items-center justify-between p-3 border border-white/10 hover:bg-[#E85002] hover:text-black hover:border-[#E85002] transition-all group/link">
-                   <div className="flex items-center gap-3">
-                       <Mail className="w-4 h-4" />
-                       <span className="font-mono text-xs uppercase tracking-widest">Email</span>
-                   </div>
-                   <MoveRight className="w-4 h-4 opacity-0 group-hover/link:opacity-100 -translate-x-2 group-hover/link:translate-x-0 transition-all"/>
-                </a>
-            </div>
-        </div>
-    ),
-    className: "md:col-span-1 md:row-span-1 h-[260px] bg-black/80 backdrop-blur-md border border-white/10",
-    isContact: true,
+    name: "VERIS",
+    status: "live",
+    statusLabel: "In development",
+    tagline: "Hardware proof that a photograph is real. Built for an age of deepfakes.",
+    tags: ["Web3", "Blockchain", "Hardware", "CV"],
   },
   {
-    id: 7,
-    title: "Philosophy",
-    description: "Design System",
-    header: (
-        <Link href="/gallery" className="w-full h-full block">
-          <div className="h-full flex flex-col justify-between p-6 bg-transparent group/phil relative overflow-hidden">
-               <div className="absolute top-0 right-0 p-2">
-                  <Terminal className="w-4 h-4 text-[#E85002]" />
-               </div>
-
-               <div className="z-10 mt-auto">
-                  <div className="flex items-center gap-2 mb-1">
-                      <div className="w-1.5 h-1.5 bg-[#E60023] rounded-full" />
-                      <span className="font-mono text-[9px] text-[#E60023]">INSPIRATION</span>
-                  </div>
-                  <h3 className="text-4xl font-display font-black text-white uppercase glitch-text" data-text="GALLERY">GALLERY</h3>
-                  <div className="w-full h-px bg-[#E85002] my-2" />
-                  <p className="text-[10px] text-white/60 font-mono uppercase tracking-widest">{">>"} View Pins</p>
-               </div>
-          </div>
-        </Link>
-    ),
-    className: "md:col-span-1 md:row-span-1 h-[260px] bg-black/80 backdrop-blur-md border border-white/10",
-  },
-
-  // --- Center Column (Profile) ---
-  {
-    id: 2,
-    title: "",
-    description: "",
-    header: (
-      <div className="relative w-full h-full min-h-[500px] flex items-center justify-center overflow-hidden">
-        <AvatarScene mode="card" interactive={true} />
-      </div>
-    ),
-    className: "md:col-span-1 md:row-span-2 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] border-white/5 transition-colors duration-500 hover:border-white/20",
-    isProfile: true,
-  },
-
-  // --- Right Column (Projects) ---
-  {
-    id: 3,
-    title: "Emotion AI",
-    description: "Featured",
-    header: (
-        <Link href="/projects" className="w-full h-full block">
-          <div className="w-full h-full p-6 flex flex-col justify-between relative overflow-hidden group/featured bg-[#0a0a0a]">
-             <div className="absolute top-0 right-0 w-16 h-16 bg-[#E85002] flex items-center justify-center">
-                  <ArrowUpRight className="text-black w-6 h-6 group-hover/featured:rotate-45 transition-transform duration-300" />
-             </div>
-
-             <div className="mt-auto relative z-10">
-               <div className="flex items-center gap-2 mb-2">
-                   <div className="w-2 h-2 bg-[#E85002] rounded-full animate-pulse" />
-                   <span className="font-mono text-[10px] text-[#E85002]">NETFLIX STYLE</span>
-               </div>
-               <p className="text-white/60 font-mono text-xs">View All Projects</p>
-             </div>
-          </div>
-        </Link>
-    ),
-    className: "md:col-span-1 md:row-span-1 h-[260px] border-[#E85002]/30 bg-black/80 backdrop-blur-md cursor-pointer",
-    fullDescription: "Explore my work in a cinematic Netflix-style interface.",
-    roles: "Interactive",
-    stack: "React · Framer Motion"
+    name: "SUKKU",
+    status: "live",
+    statusLabel: "In development",
+    tagline: "An AI companion that doesn't just respond — it notices.",
+    tags: ["Edge AI", "NLP", "Computer Vision", "Behavioral Modeling"],
   },
   {
-    id: 1,
-    title: "AI Learning",
-    description: "Real-time Tutors",
-    header: (
-        <div className="w-full h-full p-4 flex flex-col justify-between relative group/p1 bg-transparent">
-            <div className="flex justify-between items-start">
-                <Brain className="w-6 h-6 text-white/20 group-hover/p1:text-[#E85002] transition-colors" />
-                <span className="font-mono text-[10px] text-white/30">V.1.0</span>
-            </div>
-        </div>
-    ),
-    className: "md:col-span-1 md:row-span-1 h-[120px] bg-black/80 backdrop-blur-md border border-white/10",
-    fullDescription: "Built a live video-based learning system for children featuring real-time AI tutors.",
-    roles: "Jun 2025 - Jul 2025",
-    stack: "React.js · Next.js · Tailwind CSS · AI"
-  },
-  {
-    id: 4,
-    title: "Genco",
-    description: "Anon Chat",
-    header: (
-        <div className="w-full h-full p-4 flex flex-col justify-between relative group/p2 bg-transparent">
-            <div className="flex justify-between items-start">
-                <Palette className="w-6 h-6 text-white/20 group-hover/p2:text-[#E85002] transition-colors" />
-                 <span className="font-mono text-[10px] text-white/30">V.2.4</span>
-            </div>
-        </div>
-    ),
-    className: "md:col-span-1 md:row-span-1 h-[120px] bg-black/80 backdrop-blur-md border border-white/10",
-    fullDescription: "Designed a community app with features like anonymous chat and AI-driven moderation.",
-    roles: "Sep 2024 - Sep 2024",
-    stack: "React Native · Python · MongoDB"
-  },
-
-  // --- Bottom Row (About) ---
-  {
-    id: 8,
-    title: "",
-    description: "",
-    header: (
-        <div className="flex flex-col md:flex-row items-center justify-between p-8 h-full bg-transparent relative overflow-hidden">
-             {/* Scrolling Text Background */}
-            <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 overflow-hidden opacity-5 pointer-events-none whitespace-nowrap">
-                <span className="text-[120px] font-display font-black text-transparent stroke-text">
-                    DESIGN ENGINEER BUILD CREATE DESIGN ENGINEER BUILD CREATE
-                </span>
-            </div>
-
-            <div className="flex items-center gap-12 relative z-10 w-full md:w-auto text-center md:text-left">
-                <Cpu className="w-12 h-12 text-[#E85002] hidden md:block" />
-
-                <div className="space-y-4 max-w-2xl">
-                    <p className="text-2xl md:text-4xl font-bold text-white leading-none tracking-tight">
-                        BRIDGING <span className="text-[#E85002] bg-[#E85002]/10 px-2 glitch-text" data-text="CHAOS">CHAOS</span> & LOGIC.
-                    </p>
-                    <p className="text-white/60 text-sm font-mono leading-relaxed">
-                        // SYSTEM LOG: Engineer with a designer&apos;s heart.<br/>
-                        // FOCUS: Fluid Interfaces & AI Agents.
-                    </p>
-                </div>
-            </div>
-
-            <div className="mt-8 md:mt-0 relative z-10">
-                 <Link href="/contact" className="px-6 py-4 border-2 border-[#E85002] text-[#E85002] font-bold text-sm hover:bg-[#E85002] hover:text-black transition-all uppercase tracking-widest shadow-[4px_4px_0px_#E85002]">
-                    INITIATE_CONTACT
-                 </Link>
-            </div>
-        </div>
-    ),
-    className: "md:col-span-3 md:row-span-1 h-[240px] bg-black/80 backdrop-blur-md border border-white/10",
-    isSkills: true,
+    name: "EMOTION AI",
+    status: "research",
+    statusLabel: "Research",
+    tagline: "Classifying 26 complex human emotions from a single face.",
+    tags: ["Deep Learning", "PyTorch", "Attention"],
   },
 ];
 
-export default function LandingPage() {
-  const [selectedProject, setSelectedProject] = useState<Item | null>(null);
-  const [time, setTime] = useState("");
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
+const questions = [
+  "Can a machine recognize the difference between a smile that means happiness and a smile that means pain?",
+  "Can we build AI companions that people trust — not because they're programmed to seem trustworthy, but because they earned it?",
+  "In a world where any image can be faked, what does it mean to prove something is real?",
+  "How do we build systems that don't just respond to humans — but adapt to them, remember them, and grow with them?",
+];
 
-  // Smooth out the scroll progress
-  const smoothProgress = useSpring(scrollYProgress, {
-    mass: 0.1,
-    stiffness: 100,
-    damping: 20,
-    restDelta: 0.001
-  });
+/* ─── Framer Motion variants ─────────────────────────────────── */
 
-  // Animation Transforms
-  // 1. Scale Transition: Starts zoomed in (scale 2.0) - reduced from 2.5 to be less overwhelming
-  const gridScale = useTransform(smoothProgress, [0, 0.5], [2.0, 1]);
+const wordVariants: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.07,
+      duration: 0.75,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
 
-  // 2. Main Hero Text: Visible initially, fades out quickly
-  const heroTextOpacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
+const fadeUpVariants: Variants = {
+  hidden: { opacity: 0, y: 28 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.11,
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
 
-  // 3. Side & Bottom Columns: Fade in ONLY after we zoom out significantly
-  const sideColsOpacity = useTransform(smoothProgress, [0.25, 0.5], [0, 1]);
-  const sideColsScale = useTransform(smoothProgress, [0.25, 0.5], [0.8, 1]);
+/* ─── Word-split helper ──────────────────────────────────────── */
 
-  // 4. Background Title Adjustment
-  const bgTitleScale = useTransform(smoothProgress, [0, 1], [1.3, 1]);
-  const bgTitleOpacity = useTransform(smoothProgress, [0.8, 1], [1, 0.1]); // Fade out at end
-
-  useEffect(() => {
-    const updateTime = () => setTime(new Date().toLocaleTimeString('en-US', { hour12: false }));
-    const timer = setInterval(updateTime, 1000);
-    updateTime();
-    return () => clearInterval(timer);
-  }, []);
-
+function AnimatedWords({
+  text,
+  baseDelay = 0,
+  className = "",
+}: {
+  text: string;
+  baseDelay?: number;
+  className?: string;
+}) {
+  const words = text.split(" ");
   return (
-    <div ref={containerRef} className="relative min-h-[400vh] bg-black">
-      <Navbar />
+    <>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          custom={baseDelay + i}
+          variants={wordVariants}
+          initial="hidden"
+          animate="visible"
+          className={`inline-block ${className}`}
+          style={{ marginRight: "0.28em" }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </>
+  );
+}
 
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
+/* ─── Section label ──────────────────────────────────────────── */
 
-           {/* Fixed Background - Creative Engineer */}
-           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-               <motion.h1
-                  style={{ scale: bgTitleScale, opacity: bgTitleOpacity }}
-                  className="font-display font-black text-[15vw] leading-[0.8] text-white/5 uppercase tracking-tighter text-center whitespace-nowrap select-none transform mix-blend-overlay"
-                >
-                  CREATIVE<br/>ENGINEER
-               </motion.h1>
-           </div>
+function SectionLabel({ children, num }: { children: string; num: string }) {
+  return (
+    <div className="flex items-center gap-3 mb-6">
+      <span className="num-tag">{num}</span>
+      <span className="dot-accent" />
+      <span className="label">{children}</span>
+    </div>
+  );
+}
 
-           {/* INITIAL HERO TEXT OVERLAY - ABSOLUTE CENTER */}
-           <motion.div
-              style={{ opacity: heroTextOpacity }}
-              className="absolute inset-0 z-50"
-           >
-              <HeroScene />
-           </motion.div>
+/* ─── Project card ───────────────────────────────────────────── */
 
-           {/* MAIN CONTENT WRAPPER */}
-           <div className="w-full max-w-7xl relative z-10 px-4 md:px-8 h-full flex flex-col justify-center">
+function ProjectCard({ project }: { project: Project }) {
+  return (
+    <motion.article
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      className="group relative flex flex-col justify-between p-7 min-h-[300px] snap-start shrink-0 w-[80vw] md:w-auto"
+      style={{
+        background: "var(--surface)",
+        border: "1px solid var(--border)",
+        transition: "border-color 0.25s ease",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.borderColor = "var(--border-hover)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.borderColor = "var(--border)";
+      }}
+    >
+      {/* Arrow — appears on hover */}
+      <motion.div
+        className="absolute top-6 right-6"
+        initial={{ opacity: 0, x: -4, y: 4 }}
+        whileHover={{ opacity: 1, x: 0, y: 0 }}
+        style={{ color: "var(--accent)" }}
+      >
+        <ArrowUpRight size={18} />
+      </motion.div>
 
-                {/* SCALABLE GRID CONTAINER */}
-                <motion.div
-                    style={{ scale: gridScale }}
-                    className="relative w-full origin-center"
-                >
+      <div className="flex flex-col gap-4">
+        {/* Project name */}
+        <h3
+          className="display-md text-clamp-md leading-none"
+          style={{ color: "var(--fg)" }}
+        >
+          {project.name}
+        </h3>
 
-                    {/* Raycast Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 relative z-10">
-
-                        {/* Col 1 (Left) - Animated */}
-                        <motion.div
-                            style={{ opacity: sideColsOpacity, scale: sideColsScale }}
-                            className="flex flex-col gap-3"
-                        >
-                            <BentoGridItem {...items[0]} className="flex-1" />
-                            <BentoGridItem {...items[1]} className="flex-1" />
-                        </motion.div>
-
-                        {/* Col 2 (Center: Profile) - The Anchor */}
-                        <div className="flex flex-col gap-3 relative z-20">
-                            {/*
-                                This item needs to look like the "Hero Image" initially.
-                                Since we zoom IN effectively by starting at scale 1.5, this center item will appear larger.
-                            */}
-                            <BentoGridItem
-                                {...items[2]}
-                                className="h-[536px] bg-[#080808] relative z-30 glow-orange border-white/10 shadow-[0_0_50px_-10px_#E85002_40]"
-                            />
-                        </div>
-
-                        {/* Col 3 (Right) - Animated */}
-                        <motion.div
-                            style={{ opacity: sideColsOpacity, scale: sideColsScale }}
-                            className="flex flex-col gap-3"
-                        >
-                            <div className="flex-1">
-                                <BentoGridItem
-                                    {...items[3]}
-                                    onClick={() => setSelectedProject(items[3])}
-                                    className="h-full"
-                                />
-                            </div>
-                             <div className="flex-1 flex flex-col gap-3">
-                                <BentoGridItem
-                                    {...items[4]}
-                                    onClick={() => setSelectedProject(items[4])}
-                                    className="flex-1"
-                                />
-                                <BentoGridItem
-                                    {...items[5]}
-                                    onClick={() => setSelectedProject(items[5])}
-                                    className="flex-1"
-                                />
-                             </div>
-                        </motion.div>
-
-                    </div>
-
-                    {/* Bottom Row - Animated */}
-                    <motion.div
-                         style={{ opacity: sideColsOpacity, scale: sideColsScale }}
-                         className="md:col-span-3 mt-3 relative z-20"
-                    >
-                        <BentoGridItem
-                            {...items[6]}
-                            className="w-full shadow-none"
-                        />
-                    </motion.div>
-
-                </motion.div>
-
-           </div>
+        {/* Tagline */}
+        <p
+          className="text-sm leading-relaxed max-w-xs"
+          style={{ color: "var(--fg-muted)", fontFamily: "var(--font-body)" }}
+        >
+          {project.tagline}
+        </p>
       </div>
 
-      <AnimatePresence>
-        {selectedProject && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedProject(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4"
+      {/* Footer row */}
+      <div className="mt-8 flex flex-col gap-3">
+        {/* Status */}
+        {project.status === "live" ? (
+          <span className="status-live">{project.statusLabel}</span>
+        ) : (
+          <span
+            className="font-mono text-[10px] tracking-[0.14em] uppercase"
+            style={{ color: "var(--fg-subtle)" }}
           >
-             {/* Tech Modal Overlay Grid */}
-             <div className="absolute inset-0 pointer-events-none blueprint-grid opacity-20" />
-
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-[#050505] border-2 border-white/20 p-8 max-w-3xl w-full relative shadow-[8px_8px_0px_#222]"
-            >
-               {/* Modal Content - Brutalist */}
-               <button
-                onClick={() => setSelectedProject(null)}
-                className="absolute top-0 right-0 p-4 bg-[#E85002] text-black hover:bg-white hover:text-black transition-colors font-mono font-bold"
-               >
-                 CLOSE [X]
-               </button>
-
-               <div className="space-y-8 mt-4">
-                 <div className="border-b border-dashed border-white/20 pb-4">
-                    <div className="flex items-center gap-2 mb-2">
-                        <span className="w-2 h-2 bg-[#E85002]" />
-                        <p className="text-[#E85002] font-mono text-xs uppercase tracking-widest">PROJECT_FILE: {selectedProject.roles}</p>
-                    </div>
-                    <h2 className="text-6xl font-display font-black text-white uppercase tracking-tighter">{selectedProject.title}</h2>
-                 </div>
-
-                 <div className="prose prose-invert max-w-none">
-                    <p className="text-xl leading-relaxed text-white font-mono">
-                        {selectedProject.fullDescription}
-                    </p>
-                 </div>
-
-                 <div className="pt-4">
-                    <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest mb-4 border-b border-white/10 pb-2 w-fit">STACK_TRACE</h3>
-                    <div className="flex flex-wrap gap-2">
-                        {selectedProject.stack?.split('·').map((tech) => (
-                            <span key={tech} className="px-3 py-1 bg-white text-black text-sm font-bold uppercase hover:bg-[#E85002] transition-colors cursor-crosshair">
-                                {tech.trim()}
-                            </span>
-                        ))}
-                    </div>
-                 </div>
-               </div>
-            </motion.div>
-          </motion.div>
+            {project.statusLabel}
+          </span>
         )}
-      </AnimatePresence>
+
+        {/* Tags */}
+        <div className="flex flex-wrap gap-1.5">
+          {project.tags.map((tag) => (
+            <span key={tag} className="tag">
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
+/* ─── Research question row ──────────────────────────────────── */
+
+function QuestionRow({ text, index }: { text: string; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px 0px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      custom={index}
+      variants={fadeUpVariants}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      className="flex items-start gap-4 py-6"
+      style={{ borderBottom: "1px solid var(--border)" }}
+    >
+      <span
+        className="shrink-0 text-2xl md:text-3xl leading-tight"
+        style={{ color: "var(--fg)" }}
+      >
+        —
+      </span>
+      <p
+        className="text-xl md:text-2xl lg:text-3xl leading-snug"
+        style={{
+          color: "var(--fg-muted)",
+          fontFamily: "var(--font-body)",
+          maxWidth: "72ch",
+        }}
+      >
+        {text}
+      </p>
+    </motion.div>
+  );
+}
+
+/* ─── Main page component ────────────────────────────────────── */
+
+export default function LandingPage() {
+  /* Parallax for hero ember glow */
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const glowY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+
+  /* Stats section ref */
+  const statsRef = useRef<HTMLDivElement>(null);
+  const statsInView = useInView(statsRef, { once: true, margin: "-100px 0px" });
+
+  /* Manifesto ref */
+  const manifestoRef = useRef<HTMLDivElement>(null);
+  const manifestoInView = useInView(manifestoRef, { once: true, margin: "-100px 0px" });
+
+  return (
+    <div className="grain" style={{ background: "var(--bg)" }}>
+      <Navbar />
+
+      {/* ── 1. HERO ───────────────────────────────────────────── */}
+      <section
+        ref={heroRef}
+        className="relative flex flex-col justify-center min-h-screen overflow-hidden px-6 md:px-10"
+        style={{ paddingTop: "7rem", paddingBottom: "5rem" }}
+      >
+        {/* Ember radial glow — CSS only */}
+        <motion.div
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: "38%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            y: glowY,
+            width: "min(860px, 110vw)",
+            height: "min(860px, 110vw)",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(ellipse at center, rgba(255,95,31,0.13) 0%, rgba(255,95,31,0.04) 45%, transparent 72%)",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+
+        <div
+          className="relative z-10 max-w-7xl mx-auto w-full"
+          style={{ maxWidth: "1280px" }}
+        >
+          {/* Section label */}
+          <div className="mb-8 fade-up fade-up-d1">
+            <span className="label">Portfolio — 2025</span>
+          </div>
+
+          {/* Headline — word-by-word stagger */}
+          <h1 className="display-xl text-clamp-hero mb-8" style={{ color: "var(--fg)" }}>
+            <span className="block">
+              <AnimatedWords text="I don't just" baseDelay={0} />
+            </span>
+            <span className="block">
+              <AnimatedWords text="build things." baseDelay={3} />
+            </span>
+            <span
+              className="block mt-1"
+              style={{ color: "var(--fg-muted)" }}
+            >
+              <AnimatedWords text="I imagine what" baseDelay={5} />
+            </span>
+            <span
+              className="block"
+              style={{ color: "var(--fg-muted)" }}
+            >
+              <AnimatedWords text="they could mean." baseDelay={7} />
+            </span>
+          </h1>
+
+          {/* Intro line */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="text-base md:text-lg mb-12"
+            style={{
+              color: "var(--fg-muted)",
+              fontFamily: "var(--font-body)",
+              maxWidth: "56ch",
+            }}
+          >
+            Umyal Dixit — CS student, AI researcher, system builder.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.05, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="flex items-center gap-4 flex-wrap"
+          >
+            <Link
+              href="/projects"
+              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-mono tracking-widest uppercase transition-all duration-200"
+              style={{
+                background: "var(--accent)",
+                color: "#0A0A0A",
+                fontWeight: 500,
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "#ff7a45";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "var(--accent)";
+              }}
+            >
+              View Work
+              <ArrowUpRight size={14} />
+            </Link>
+
+            <Link
+              href="/about"
+              className="inline-flex items-center gap-2 px-6 py-3 text-sm font-mono tracking-widest uppercase transition-all duration-200"
+              style={{
+                border: "1px solid var(--border)",
+                color: "var(--fg-muted)",
+              }}
+              onMouseEnter={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.borderColor = "var(--border-hover)";
+                el.style.color = "var(--fg)";
+              }}
+              onMouseLeave={(e) => {
+                const el = e.currentTarget as HTMLElement;
+                el.style.borderColor = "var(--border)";
+                el.style.color = "var(--fg-muted)";
+              }}
+            >
+              About me
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.4, duration: 0.8 }}
+          className="absolute bottom-10 left-6 md:left-10 flex items-center gap-3"
+        >
+          <div
+            className="w-px h-12 origin-top"
+            style={{ background: "var(--fg-subtle)" }}
+          />
+          <span className="label" style={{ writingMode: "vertical-rl" }}>
+            Scroll
+          </span>
+        </motion.div>
+      </section>
+
+      {/* ── 2. IDENTITY MARQUEE ──────────────────────────────────── */}
+      <div
+        className="marquee-outer w-full py-4"
+        style={{
+          background: "var(--surface)",
+          borderTop: "1px solid var(--border)",
+          borderBottom: "1px solid var(--border)",
+        }}
+      >
+        <div className="marquee-track">
+          {/* Render twice for seamless loop */}
+          {[...marqueeItems, ...marqueeItems].map((item, i) => (
+            <span
+              key={i}
+              className="inline-flex items-center gap-4 px-6"
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "11px",
+                letterSpacing: "0.16em",
+                textTransform: "uppercase",
+                color: "var(--fg-muted)",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {item}
+              <span className="dot-accent shrink-0" />
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ── 3. WHAT I'M BUILDING ────────────────────────────────── */}
+      <section
+        className="px-6 md:px-10 py-24 max-w-7xl mx-auto w-full"
+        style={{ maxWidth: "1280px" }}
+      >
+        <SectionLabel num="01">Currently Building</SectionLabel>
+
+        <h2
+          className="display-md text-clamp-lg mb-16"
+          style={{ color: "var(--fg)" }}
+        >
+          Systems at the edge of{" "}
+          <br className="hidden md:block" />
+          what&apos;s possible
+        </h2>
+
+        {/* Mobile: horizontal scroll / Desktop: 3-col grid */}
+        <div
+          className="flex md:grid md:grid-cols-3 gap-4 overflow-x-auto snap-x snap-mandatory pb-4 md:overflow-visible md:pb-0"
+          style={{ scrollbarWidth: "none" }}
+        >
+          {projects.map((project) => (
+            <ProjectCard key={project.name} project={project} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── 4. RESEARCH QUESTIONS ────────────────────────────────── */}
+      <section
+        className="px-6 md:px-10 py-24 w-full"
+        style={{ background: "var(--surface-2)" }}
+      >
+        <div className="max-w-7xl mx-auto" style={{ maxWidth: "1280px" }}>
+          <SectionLabel num="02">The questions I'm trying to answer</SectionLabel>
+
+          <div className="hr mb-8" />
+
+          {questions.map((q, i) => (
+            <QuestionRow key={i} text={q} index={i} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── 5. SELECTED WINS ─────────────────────────────────────── */}
+      <section
+        className="px-6 md:px-10 py-24 max-w-7xl mx-auto w-full"
+        style={{ maxWidth: "1280px" }}
+      >
+        <SectionLabel num="03">By the numbers</SectionLabel>
+
+        <div ref={statsRef}>
+          <div className="hr mb-16" />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-0 md:divide-x md:divide-[var(--border)]">
+            {[
+              { num: "10+", label: "Hackathons won" },
+              { num: "5", label: "Systems in production / active development" },
+              { num: "3", label: "Research domains — AI · Hardware · Web3" },
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                custom={i}
+                variants={fadeUpVariants}
+                initial="hidden"
+                animate={statsInView ? "visible" : "hidden"}
+                className="flex flex-col gap-2 md:px-12 first:pl-0 last:pr-0"
+              >
+                <span
+                  className="display-xl"
+                  style={{
+                    color: "var(--fg)",
+                    fontSize: "clamp(4rem, 8vw, 8rem)",
+                  }}
+                >
+                  {stat.num}
+                </span>
+                <span
+                  className="text-sm leading-relaxed"
+                  style={{
+                    color: "var(--fg-muted)",
+                    fontFamily: "var(--font-body)",
+                    maxWidth: "24ch",
+                  }}
+                >
+                  {stat.label}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 6. MANIFESTO ─────────────────────────────────────────── */}
+      <section
+        className="px-6 md:px-10 py-32 w-full relative overflow-hidden"
+        style={{ background: "var(--surface)" }}
+      >
+        {/* Large ambient background text */}
+        <div
+          aria-hidden
+          className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
+          style={{ zIndex: 0 }}
+        >
+          <span
+            className="display-xl whitespace-nowrap"
+            style={{
+              fontSize: "clamp(5rem, 18vw, 18rem)",
+              color: "transparent",
+              WebkitTextStroke: "1px rgba(237,230,214,0.04)",
+              letterSpacing: "-0.04em",
+            }}
+          >
+            EXECUTE
+          </span>
+        </div>
+
+        <div
+          ref={manifestoRef}
+          className="relative z-10 max-w-7xl mx-auto"
+          style={{ maxWidth: "1280px" }}
+        >
+          <SectionLabel num="04">Manifesto</SectionLabel>
+
+          <motion.blockquote
+            custom={0}
+            variants={fadeUpVariants}
+            initial="hidden"
+            animate={manifestoInView ? "visible" : "hidden"}
+            className="display-xl text-clamp-lg mb-10"
+            style={{ color: "var(--fg)" }}
+          >
+            &ldquo;I&rsquo;m not exploring.
+            <br />
+            I&rsquo;m executing.&rdquo;
+          </motion.blockquote>
+
+          <motion.p
+            custom={2}
+            variants={fadeUpVariants}
+            initial="hidden"
+            animate={manifestoInView ? "visible" : "hidden"}
+            className="text-base md:text-lg mb-12 leading-relaxed"
+            style={{
+              color: "var(--fg-muted)",
+              fontFamily: "var(--font-body)",
+              maxWidth: "54ch",
+            }}
+          >
+            Building Veris, Sukku, and a research direction I&apos;ve already chosen.
+            The gap between my vision and my execution is the engine.
+          </motion.p>
+
+          <motion.div
+            custom={4}
+            variants={fadeUpVariants}
+            initial="hidden"
+            animate={manifestoInView ? "visible" : "hidden"}
+          >
+            <Link
+              href="/projects"
+              className="inline-flex items-center gap-2 link-underline font-mono text-sm tracking-widest uppercase"
+              style={{ color: "var(--fg)" }}
+            >
+              See all projects
+              <ArrowUpRight size={14} />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 }

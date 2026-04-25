@@ -1,33 +1,46 @@
 import type { Metadata } from "next";
-import { Syne, Manrope } from "next/font/google";
+import { Fraunces, Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const syne = Syne({
-  variable: "--font-syne",
+const fraunces = Fraunces({
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  axes: ["opsz", "wght", "SOFT", "WONK"],
+  display: "swap",
 });
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const geist = Geist({
+  variable: "--font-body",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Umyal Dixit | Engineer & Designer",
-  description: "Portfolio of Umyal Dixit - Building robust systems with maximalist design.",
+  title: "Umyal Dixit — AI Researcher & Builder",
+  description:
+    "CS student from Gurugram building at the intersection of AI and human emotion. Maker of Veris, Sukku, and systems that matter.",
+  openGraph: {
+    title: "Umyal Dixit — AI Researcher & Builder",
+    description:
+      "Building at the edge of AI and human emotion. Veris, Sukku, and systems that matter.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body
-        className={`${syne.variable} ${manrope.variable} antialiased font-sans bg-black text-white selection:bg-[#E85002] selection:text-white`}
+        className={`${fraunces.variable} ${geist.variable} ${jetbrainsMono.variable} antialiased`}
       >
         {children}
       </body>
